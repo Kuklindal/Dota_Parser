@@ -103,7 +103,8 @@ def fetch_dotabuff_with_playwright(url, timeout=60000, save_debug_path=None, hea
                 for attempt in range(1, 4):
                     try:
                         page.goto(candidate, wait_until="domcontentloaded", timeout=timeout)
-                        page.wait_for_timeout(1200)
+                        page.wait_for_load_state("domcontentloaded")
+                        page.wait_for_timeout(1500)
                         title_l = (page.title() or "").lower()
                         if "just a moment" in title_l:
                             raise RuntimeError("Cloudflare challenge page")
@@ -140,7 +141,14 @@ def fetch_dotabuff_with_playwright(url, timeout=60000, save_debug_path=None, hea
                     continue
 
             page.wait_for_timeout(int(random.uniform(1200, 2400)))
-            html = page.content()
+            html = None
+            for _ in range(5):
+                try:
+                    html = page.content()
+                    if html:
+                        break
+                except Exception:
+                    page.wait_for_timeout(800)
             if "Just a moment..." in html and "security verification" in html.lower():
                 raise RuntimeError("Cloudflare challenge page after load")
 
@@ -1060,13 +1068,30 @@ def main():
         url_lanes = f"{BASE_URL}/matches/{mid}/lanes"
 
         save_debug = str(debug_dir / f"match_{mid}_overview.html") if i == 0 else None
-        html_overview = fetch_dotabuff_with_playwright(url_overview, save_debug_path=save_debug, headed=args.headed)
-        overview = parse_overview(html_overview, mid)
-        matches_overview.append(overview)
+        try:
+            html_overview = fetch_dotabuff_with_playwright(
+                url_overview,
+                save_debug_path=save_debug,
+                headed=args.headed
+            )
+            overview = parse_overview(html_overview, mid)
+            matches_overview.append(overview)
+
+        except Exception as e:
+            print(f"Ошибка загрузки overview {mid}: {e}")
+            continue
+
 
         time.sleep(random.uniform(2.0, 4.0))
-        html_lanes = fetch_dotabuff_with_playwright(url_lanes, headed=args.headed)
-        matches_lanes.append(parse_lanes_tab(html_lanes, mid))
+
+
+        try:
+            html_lanes = fetch_dotabuff_with_playwright(url_lanes, headed=args.headed)
+            matches_lanes.append(parse_lanes_tab(html_lanes, mid))
+
+        except Exception as e:
+            print(f"Ошибка загрузки lanes {mid}: {e}")
+            matches_lanes.append([])   # чтобы не ломалась структура
 
         time.sleep(random.uniform(2.0, 4.0))
 
