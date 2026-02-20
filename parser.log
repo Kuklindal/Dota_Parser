@@ -1,0 +1,17 @@
+2026-02-20 17:13:18,361 | INFO | Матчей к обработке: 3609
+2026-02-20 17:13:18,361 | INFO | [1/3609] Match 8609332493 START
+2026-02-20 17:13:18,361 | INFO | Match 8609332493: fetch overview
+2026-02-20 17:13:38,623 | INFO | Match 8609332493: parse overview
+2026-02-20 17:13:46,810 | INFO | Match 8609332493: fetch lanes
+2026-02-20 17:14:00,243 | INFO | Match 8609332493: parse lanes
+2026-02-20 17:14:00,297 | INFO | Match 8609332493: append to Excel
+2026-02-20 17:14:00,397 | INFO | [1/3609] Match 8609332493 DONE in 42.0s
+2026-02-20 17:14:02,883 | INFO | [2/3609] Match 8609356930 START
+2026-02-20 17:14:02,883 | INFO | Match 8609356930: fetch overview
+2026-02-20 17:14:18,222 | INFO | Match 8609356930: parse overview
+2026-02-20 17:14:22,941 | INFO | Match 8609356930: fetch lanes
+2026-02-20 17:16:23,143 | ERROR | Ошибка загрузки lanes 8609356930: Timeout while loading https://ru.dotabuff.com/matches/8609356930/lanes
+2026-02-20 17:16:23,144 | INFO | Match 8609356930: append to Excel
+2026-02-20 17:16:23,248 | INFO | [2/3609] Match 8609356930 DONE in 140.4s
+2026-02-20 17:16:27,016 | INFO | [3/3609] Match 8609337846 START
+2026-02-20 17:16:27,016 | INFO | Match 8609337846: fetch overview

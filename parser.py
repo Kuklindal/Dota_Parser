@@ -8,11 +8,13 @@
 import re
 import time
 import random
+import logging
 from pathlib import Path
 
 import pandas as pd
 from bs4 import BeautifulSoup
 import requests
+from openpyxl import load_workbook, Workbook
 
 try:
     from playwright.sync_api import sync_playwright
@@ -27,7 +29,7 @@ USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTM
 _playwright_storage_state = None
 
 
-def fetch_dotabuff_with_playwright(url, timeout=60000, save_debug_path=None, headed=False):
+def fetch_dotabuff_with_playwright(url, timeout=60000, save_debug_path=None, headed=False, max_total_ms=120000, logger=None):
     """
     Надёжная загрузка страниц Dotabuff через Playwright.
     Важно: НЕ используем networkidle (на Dotabuff часто бесконечные запросы).
@@ -36,6 +38,23 @@ def fetch_dotabuff_with_playwright(url, timeout=60000, save_debug_path=None, hea
         raise RuntimeError("Нужен Playwright: pip install playwright && playwright install chromium")
 
     global _playwright_storage_state
+    started = time.monotonic()
+
+    def _remaining_ms():
+        if max_total_ms is None:
+            return None
+        elapsed = int((time.monotonic() - started) * 1000)
+        return max_total_ms - elapsed
+
+    def _clamp_timeout(ms, min_ms=1000):
+        rem = _remaining_ms()
+        if rem is None:
+            return ms
+        if rem <= 0:
+            raise TimeoutError(f"Timeout while loading {url}")
+        if rem < min_ms:
+            return rem
+        return min(ms, rem)
 
     stealth_script = """
     Object.defineProperty(navigator, 'webdriver', { get: () => false });
@@ -102,9 +121,9 @@ def fetch_dotabuff_with_playwright(url, timeout=60000, save_debug_path=None, hea
             for candidate in _url_candidates(url):
                 for attempt in range(1, 4):
                     try:
-                        page.goto(candidate, wait_until="domcontentloaded", timeout=timeout)
+                        page.goto(candidate, wait_until="domcontentloaded", timeout=_clamp_timeout(timeout))
                         page.wait_for_load_state("domcontentloaded")
-                        page.wait_for_timeout(1500)
+                        page.wait_for_timeout(_clamp_timeout(1500))
                         title_l = (page.title() or "").lower()
                         if "just a moment" in title_l:
                             raise RuntimeError("Cloudflare challenge page")
@@ -112,7 +131,7 @@ def fetch_dotabuff_with_playwright(url, timeout=60000, save_debug_path=None, hea
                         break
                     except Exception as e:
                         last_err = e
-                        page.wait_for_timeout(700 * attempt)
+                        page.wait_for_timeout(_clamp_timeout(700 * attempt))
                 if loaded_url:
                     break
 
@@ -120,7 +139,7 @@ def fetch_dotabuff_with_playwright(url, timeout=60000, save_debug_path=None, hea
                 raise last_err if last_err else RuntimeError(f"Не удалось открыть URL: {url}")
 
             # Дать странице прогрузить основные блоки
-            page.wait_for_timeout(3000)
+            page.wait_for_timeout(_clamp_timeout(3000))
 
             # Ждём наиболее стабильные маркеры контента матча
             for selector in [
@@ -135,12 +154,12 @@ def fetch_dotabuff_with_playwright(url, timeout=60000, save_debug_path=None, hea
                 "main",
             ]:
                 try:
-                    page.wait_for_selector(selector, timeout=15000)
+                    page.wait_for_selector(selector, timeout=_clamp_timeout(15000))
                     break
                 except Exception:
                     continue
 
-            page.wait_for_timeout(int(random.uniform(1200, 2400)))
+            page.wait_for_timeout(_clamp_timeout(int(random.uniform(1200, 2400))))
             html = None
             for _ in range(5):
                 try:
@@ -148,7 +167,7 @@ def fetch_dotabuff_with_playwright(url, timeout=60000, save_debug_path=None, hea
                     if html:
                         break
                 except Exception:
-                    page.wait_for_timeout(800)
+                    page.wait_for_timeout(_clamp_timeout(800))
             if "Just a moment..." in html and "security verification" in html.lower():
                 raise RuntimeError("Cloudflare challenge page after load")
 
@@ -940,6 +959,138 @@ def load_match_ids(csv_path):
         return df["match_id"].astype(str).str.strip().tolist()
     return df.iloc[:, 0].astype(str).str.strip().tolist()
 
+SUMMARY_COLS = ["match_id", "duration", "score", "победитель", "winner", "players_parsed", "error"]
+PLAYER_COLS = [
+    "match_id", "team", "hero", "lane", "lane_role", "position",
+    "start_talent", "first_talent_id", "first_talent", "first_talent_text",
+    "K", "D", "A", "GPM", "XPM", "LH", "DN"
+]
+LANES_RAW_COLS = [
+    "match_id", "hero", "lane_outcome", "lane_team", "lane_detail", "lane_simple",
+    "lane_side", "lane", "gpm_12", "xpm_12", "k_12", "d_12", "a_12", "lh_4", "lh_8", "lh_12"
+]
+LANING_COLS = [
+    "match_id", "hero", "lane_outcome", "lane_team", "lane_detail",
+    "lane_simple", "lane_side", "gpm_12", "xpm_12",
+    "kills_12", "deaths_12", "assists_12", "lh_4", "lh_8", "lh_12"
+]
+
+def init_logging(log_path):
+    logger = logging.getLogger("dotabuff")
+    if logger.handlers:
+        return logger
+
+    logger.setLevel(logging.INFO)
+    log_path = Path(log_path)
+    log_path.parent.mkdir(parents=True, exist_ok=True)
+
+    fmt = logging.Formatter("%(asctime)s | %(levelname)s | %(message)s")
+    file_handler = logging.FileHandler(log_path, encoding="utf-8")
+    file_handler.setFormatter(fmt)
+    stream_handler = logging.StreamHandler()
+    stream_handler.setFormatter(fmt)
+
+    logger.addHandler(file_handler)
+    logger.addHandler(stream_handler)
+    return logger
+
+def _get_or_create_sheet(wb, sheet_name, headers):
+    if sheet_name in wb.sheetnames:
+        ws = wb[sheet_name]
+    else:
+        ws = wb.create_sheet(sheet_name)
+
+    existing = [ws.cell(1, c).value for c in range(1, ws.max_column + 1)]
+    if not any(existing):
+        ws.append(headers)
+        return ws, headers
+
+    headers_clean = [str(h) if h is not None else "" for h in existing]
+    return ws, headers_clean
+
+def _append_rows(ws, rows, headers):
+    for row in rows:
+        ws.append([row.get(h, "") for h in headers])
+
+def _read_existing_match_ids(ws, headers):
+    if not ws or not headers:
+        return set()
+    try:
+        idx = headers.index("match_id") + 1
+    except ValueError:
+        return set()
+    ids = set()
+    for row in ws.iter_rows(min_row=2, min_col=idx, max_col=idx, values_only=True):
+        val = row[0]
+        if val is None:
+            continue
+        ids.add(str(val).strip())
+    return ids
+
+def append_match_to_excel(overview, lanes_rows, output_path, logger=None):
+    path = Path(output_path)
+    if not path.exists():
+        save_to_excel([overview], [lanes_rows], path)
+        return True
+
+    wb = load_workbook(path)
+
+    winner_val = overview.get("winner") or ""
+    winner_label = "Radiant (Светлая)" if winner_val == "Radiant" else "Dire (Тьма)" if winner_val == "Dire" else ""
+    summary_rows = [{
+        "match_id": overview.get("match_id"),
+        "duration": overview.get("duration", ""),
+        "score": overview.get("score", ""),
+        "победитель": winner_label,
+        "winner": winner_val,
+        "players_parsed": overview.get("players_count", 0),
+        "error": overview.get("error", ""),
+    }]
+
+    ws, headers = _get_or_create_sheet(wb, "Матчи_сводка", SUMMARY_COLS)
+    existing_ids = _read_existing_match_ids(ws, headers)
+    mid = str(overview.get("match_id") or "").strip()
+    if mid and mid in existing_ids:
+        if logger:
+            logger.info(f"Match {mid}: already in Excel, skip append")
+        return False
+    _append_rows(ws, summary_rows, headers)
+
+    players_rows = overview.get("players", []) or []
+    ws, headers = _get_or_create_sheet(wb, "Игроки_обзор", PLAYER_COLS)
+    _append_rows(ws, players_rows, headers)
+
+    ws, headers = _get_or_create_sheet(wb, "Линии", LANES_RAW_COLS)
+    _append_rows(ws, lanes_rows, headers)
+
+    laning_stats = []
+    for r in lanes_rows:
+        laning_stats.append({
+            "match_id": r.get("match_id"),
+            "hero": r.get("hero"),
+            "lane_outcome": r.get("lane_outcome"),
+            "lane_team": r.get("lane_team"),
+            "lane_detail": r.get("lane_detail"),
+            "lane_simple": r.get("lane_simple"),
+            "lane_side": r.get("lane_side"),
+            "gpm_12": r.get("gpm_12"),
+            "xpm_12": r.get("xpm_12"),
+            "kills_12": r.get("k_12"),
+            "deaths_12": r.get("d_12"),
+            "assists_12": r.get("a_12"),
+            "lh_4": r.get("lh_4"),
+            "lh_8": r.get("lh_8"),
+            "lh_12": r.get("lh_12"),
+        })
+
+    ws, headers = _get_or_create_sheet(wb, "Лайнинг_статистика", LANING_COLS)
+    _append_rows(ws, laning_stats, headers)
+    ws, headers = _get_or_create_sheet(wb, "Лайнинг_вся_статистика", LANING_COLS)
+    _append_rows(ws, laning_stats, headers)
+
+    wb.save(path)
+    return True
+
 
 def save_to_excel(matches_overview, matches_lanes, output_path):
     """Сохранить данные в Excel:
@@ -967,7 +1118,12 @@ def save_to_excel(matches_overview, matches_lanes, output_path):
                 "error": m.get("error", ""),
             })
         if summary_rows:
-            pd.DataFrame(summary_rows).to_excel(w, sheet_name="Матчи_сводка", index=False)
+            df_summary = pd.DataFrame(summary_rows)
+            for col in SUMMARY_COLS:
+                if col not in df_summary.columns:
+                    df_summary[col] = ""
+            df_summary = df_summary[SUMMARY_COLS]
+            df_summary.to_excel(w, sheet_name="Матчи_сводка", index=False)
 
         # --- Игроки_обзор ---
         all_players = []
@@ -975,16 +1131,21 @@ def save_to_excel(matches_overview, matches_lanes, output_path):
             all_players.extend(m.get("players", []))
         if all_players:
             df_players = pd.DataFrame(all_players)
-            # гарантируем колонки талантов
-            for col in ["start_talent", "first_talent_id", "first_talent", "first_talent_text"]:
+            for col in PLAYER_COLS:
                 if col not in df_players.columns:
                     df_players[col] = ""
+            df_players = df_players[PLAYER_COLS]
             df_players.to_excel(w, sheet_name="Игроки_обзор", index=False)
 
         # --- Линии (сырое) ---
         flat_lanes = [row for rows in matches_lanes for row in rows]
         if flat_lanes:
-            pd.DataFrame(flat_lanes).to_excel(w, sheet_name="Линии", index=False)
+            df_lanes = pd.DataFrame(flat_lanes)
+            for col in LANES_RAW_COLS:
+                if col not in df_lanes.columns:
+                    df_lanes[col] = ""
+            df_lanes = df_lanes[LANES_RAW_COLS]
+            df_lanes.to_excel(w, sheet_name="Линии", index=False)
 
         # --- Лайнинг_статистика (полная стадия) ---
         laning_stats = []
@@ -1007,19 +1168,14 @@ def save_to_excel(matches_overview, matches_lanes, output_path):
                     "lh_8": r.get("lh_8"),
                     "lh_12": r.get("lh_12"),
                 })
-        laning_cols = [
-            "match_id", "hero", "lane_outcome", "lane_team", "lane_detail",
-            "lane_simple", "lane_side", "gpm_12", "xpm_12",
-            "kills_12", "deaths_12", "assists_12", "lh_4", "lh_8", "lh_12"
-        ]
         df_laning = pd.DataFrame(laning_stats)
         if df_laning.empty:
-            df_laning = pd.DataFrame(columns=laning_cols)
+            df_laning = pd.DataFrame(columns=LANING_COLS)
         else:
-            for c in laning_cols:
+            for c in LANING_COLS:
                 if c not in df_laning.columns:
                     df_laning[c] = ""
-            df_laning = df_laning[laning_cols]
+            df_laning = df_laning[LANING_COLS]
 
         df_laning.to_excel(w, sheet_name="Лайнинг_статистика", index=False)
         df_laning.to_excel(w, sheet_name="Лайнинг_вся_статистика", index=False)
@@ -1037,18 +1193,36 @@ def main():
     parser.add_argument("--csv", default=os.environ.get("DOTABUFF_CSV", csv_path))
     parser.add_argument("--output", "-o", default=os.environ.get("DOTABUFF_OUTPUT"))
     parser.add_argument("--limit", "-n", type=int, default=0)
+    parser.add_argument("--start", type=int, default=1, help="Стартовый номер матча (1-based)")
+    parser.add_argument("--match-timeout", type=int, default=300, help="Макс. время на матч (сек)")
+    parser.add_argument("--page-timeout-ms", type=int, default=120000, help="Макс. время на загрузку одной страницы (мс)")
+    parser.add_argument("--no-save-each", action="store_true", help="Не сохранять в Excel после каждого матча")
+    parser.add_argument("--log", default="", help="Путь к лог-файлу")
     parser.add_argument("--headed", action="store_true")
     args = parser.parse_args()
 
     if args.output:
         output_excel = Path(args.output)
 
+    save_each = not args.no_save_each
+    log_path = args.log or str(Path(__file__).resolve().parent / "parser.log")
+    logger = init_logging(log_path)
+
     match_ids = load_match_ids(args.csv)
     if args.limit and args.limit > 0:
         match_ids = match_ids[:args.limit]
-        print(f"Обрабатываем первые {args.limit} матчей")
+        logger.info(f"Обрабатываем первые {args.limit} матчей")
 
-    print(f"Матчей к обработке: {len(match_ids)}")
+    start_idx = max(1, int(args.start or 1)) - 1
+    if start_idx >= len(match_ids):
+        logger.error(f"Стартовый номер {args.start} превышает число матчей: {len(match_ids)}")
+        return
+
+    if start_idx > 0:
+        match_ids = match_ids[start_idx:]
+        logger.info(f"Стартуем с матча №{start_idx + 1} (ID {match_ids[0]})")
+
+    logger.info(f"Матчей к обработке: {len(match_ids)}")
 
     if not HAS_PLAYWRIGHT:
         raise RuntimeError("Playwright не установлен. pip install playwright && playwright install chromium")
@@ -1063,40 +1237,70 @@ def main():
         mid = str(mid).strip()
         if not mid:
             continue
-        print(f"[{i+1}/{len(match_ids)}] Match {mid} ...")
+        match_start = time.monotonic()
+        def _check_match_timeout(stage):
+            if args.match_timeout and args.match_timeout > 0:
+                if time.monotonic() - match_start > args.match_timeout:
+                    raise TimeoutError(f"Match {mid} timeout at stage: {stage}")
+        logger.info(f"[{i+1}/{len(match_ids)}] Match {mid} START")
         url_overview = f"{BASE_URL}/matches/{mid}"
         url_lanes = f"{BASE_URL}/matches/{mid}/lanes"
 
         save_debug = str(debug_dir / f"match_{mid}_overview.html") if i == 0 else None
         try:
+            logger.info(f"Match {mid}: fetch overview")
+            _check_match_timeout("fetch_overview")
             html_overview = fetch_dotabuff_with_playwright(
                 url_overview,
                 save_debug_path=save_debug,
-                headed=args.headed
+                headed=args.headed,
+                max_total_ms=args.page_timeout_ms,
+                logger=logger
             )
+            logger.info(f"Match {mid}: parse overview")
+            _check_match_timeout("parse_overview")
             overview = parse_overview(html_overview, mid)
             matches_overview.append(overview)
-
         except Exception as e:
-            print(f"Ошибка загрузки overview {mid}: {e}")
+            logger.error(f"Ошибка загрузки overview {mid}: {e}")
             continue
 
-
         time.sleep(random.uniform(2.0, 4.0))
-
 
         try:
-            html_lanes = fetch_dotabuff_with_playwright(url_lanes, headed=args.headed)
-            matches_lanes.append(parse_lanes_tab(html_lanes, mid))
+            logger.info(f"Match {mid}: fetch lanes")
+            _check_match_timeout("fetch_lanes")
+            html_lanes = fetch_dotabuff_with_playwright(
+                url_lanes,
+                headed=args.headed,
+                max_total_ms=args.page_timeout_ms,
+                logger=logger
+            )
+            logger.info(f"Match {mid}: parse lanes")
+            _check_match_timeout("parse_lanes")
+            lanes_rows = parse_lanes_tab(html_lanes, mid)
+            matches_lanes.append(lanes_rows)
 
         except Exception as e:
-            print(f"Ошибка загрузки lanes {mid}: {e}")
+            logger.error(f"Ошибка загрузки lanes {mid}: {e}")
+            lanes_rows = []
             matches_lanes.append([])   # чтобы не ломалась структура
+
+        if save_each:
+            try:
+                logger.info(f"Match {mid}: append to Excel")
+                append_match_to_excel(overview, lanes_rows, output_excel, logger=logger)
+            except Exception as e:
+                logger.error(f"Ошибка записи Excel для {mid}: {e}")
+
+        elapsed = time.monotonic() - match_start
+        logger.info(f"[{i+1}/{len(match_ids)}] Match {mid} DONE in {elapsed:.1f}s")
 
         time.sleep(random.uniform(2.0, 4.0))
 
-    save_to_excel(matches_overview, matches_lanes, output_excel)
-    print("Готово.")
+    if not save_each:
+        save_to_excel(matches_overview, matches_lanes, output_excel)
+    logger.info("Готово.")
 
 if __name__ == "__main__":
     main()
