@@ -886,10 +886,19 @@ def parse_lanes_tab(html, match_id):
 
         head_join = " ".join(headers).lower()
         hero_links = len(tbody.select("a[href*='/heroes/']"))
+        RUS_HDR_LANE = "\u043b\u0438\u043d\u0438\u044f"
+        RUS_HDR_HERO = "\u0433\u0435\u0440\u043e\u0439"
+        RUS_HDR_KILLS = "\u0443\u0431"
+        RUS_HDR_DEATHS = "\u0441\u043c\u0435\u0440\u0442"
+        RUS_HDR_ASSISTS = "\u043f\u043e\u043c\u043e\u0449"
+        RUS_HDR_GPM = "\u0437\u043e\u043b\u043e\u0442"
+        RUS_HDR_XPM = "\u043e\u043f\u044b\u0442"
+
         has_lane_like_headers = any(
             k in head_join for k in (
                 "lane", "hero", "gpm", "xpm", "net", "@", "kill", "death", "assist",
-                "??????", "????????", "????", "????????", "??????????", "??????", "????????????"
+                RUS_HDR_LANE, RUS_HDR_HERO, RUS_HDR_KILLS, RUS_HDR_DEATHS, RUS_HDR_ASSISTS,
+                RUS_HDR_GPM, RUS_HDR_XPM
             )
         )
         if hero_links < 5 and not has_lane_like_headers:
@@ -899,19 +908,19 @@ def parse_lanes_tab(html, match_id):
         for h in headers:
             h = (h or "").strip()
             hl = h.lower()
-            if h in ("??????????","Hero") or "hero" in hl or "????????" in hl:
+            if h in ("Hero",) or "hero" in hl or RUS_HDR_HERO in hl:
                 keys.append("hero"); continue
-            if h in ("??????????","??","Lane") or "lane" in hl or "??????" in hl:
+            if h in ("Lane",) or "lane" in hl or RUS_HDR_LANE in hl:
                 keys.append("lane_cell"); continue
-            if h in ("????","GPM","Net") or "gpm" in hl or "net" in hl or "????" in hl:
+            if h in ("GPM", "Net") or "gpm" in hl or "net" in hl or RUS_HDR_GPM in hl:
                 keys.append("gpm_12"); continue
-            if h.lower() in ("????????","xpm") or "xpm" in hl or "????????" in hl:
+            if h.lower() in ("xpm",) or "xpm" in hl or RUS_HDR_XPM in hl:
                 keys.append("xpm_12"); continue
-            if h in ("??","K") or "kill" in hl:
+            if h in ("K",) or "kill" in hl or RUS_HDR_KILLS in hl:
                 keys.append("k_12"); continue
-            if h in ("??","D") or "death" in hl:
+            if h in ("D",) or "death" in hl or RUS_HDR_DEATHS in hl:
                 keys.append("d_12"); continue
-            if h in ("??","A") or "assist" in hl:
+            if h in ("A",) or "assist" in hl or RUS_HDR_ASSISTS in hl:
                 keys.append("a_12"); continue
             m = re.search(r"@\s*(4|8|12)", h) or re.search(r"(?:^|\D)(4|8|12)(?:\D|$)", h)
             if m:
@@ -959,7 +968,30 @@ def load_match_ids(csv_path):
         return df["match_id"].astype(str).str.strip().tolist()
     return df.iloc[:, 0].astype(str).str.strip().tolist()
 
-SUMMARY_COLS = ["match_id", "duration", "score", "победитель", "winner", "players_parsed", "error"]
+WINNER_COL = "\u043f\u043e\u0431\u0435\u0434\u0438\u0442\u0435\u043b\u044c"
+RUS_SHEET_SUMMARY = "\u041c\u0430\u0442\u0447\u0438_\u0441\u0432\u043e\u0434\u043a\u0430"
+RUS_SHEET_PLAYERS = "\u0418\u0433\u0440\u043e\u043a\u0438_\u043e\u0431\u0437\u043e\u0440"
+RUS_SHEET_LANES = "\u041b\u0438\u043d\u0438\u0438"
+RUS_SHEET_LANING = "\u041b\u0430\u0439\u043d\u0438\u043d\u0433_\u0441\u0442\u0430\u0442\u0438\u0441\u0442\u0438\u043a\u0430"
+RUS_SHEET_LANING_ALL = "\u041b\u0430\u0439\u043d\u0438\u043d\u0433_\u0432\u0441\u044f_\u0441\u0442\u0430\u0442\u0438\u0441\u0442\u0438\u043a\u0430"
+
+DEFAULT_SHEETS = {
+    "summary": "Matches_Summary",
+    "players": "Players_Overview",
+    "lanes": "Lanes_Raw",
+    "laning": "Laning_Stats",
+    "laning_all": "Laning_All",
+}
+
+SHEET_CANDIDATES = {
+    "summary": [RUS_SHEET_SUMMARY, DEFAULT_SHEETS["summary"]],
+    "players": [RUS_SHEET_PLAYERS, DEFAULT_SHEETS["players"]],
+    "lanes": [RUS_SHEET_LANES, DEFAULT_SHEETS["lanes"]],
+    "laning": [RUS_SHEET_LANING, DEFAULT_SHEETS["laning"]],
+    "laning_all": [RUS_SHEET_LANING_ALL, DEFAULT_SHEETS["laning_all"]],
+}
+
+SUMMARY_COLS = ["match_id", "duration", "score", WINNER_COL, "winner", "players_parsed", "error"]
 PLAYER_COLS = [
     "match_id", "team", "hero", "lane", "lane_role", "position",
     "start_talent", "first_talent_id", "first_talent", "first_talent_text",
@@ -994,11 +1026,31 @@ def init_logging(log_path):
     logger.addHandler(stream_handler)
     return logger
 
+def _safe_sheet_title(title):
+    if title is None:
+        return ""
+    invalid = set("[]:*?/\\")
+    cleaned = "".join(ch for ch in str(title) if ch not in invalid)
+    cleaned = cleaned[:31]
+    return cleaned or "Sheet"
+
+
+def _resolve_sheet_name(wb, logical):
+    for name in SHEET_CANDIDATES.get(logical, []):
+        if name in wb.sheetnames:
+            return name
+    return DEFAULT_SHEETS.get(logical, logical)
+
+
 def _get_or_create_sheet(wb, sheet_name, headers):
     if sheet_name in wb.sheetnames:
         ws = wb[sheet_name]
     else:
-        ws = wb.create_sheet(sheet_name)
+        safe_name = _safe_sheet_title(sheet_name)
+        if safe_name in wb.sheetnames:
+            ws = wb[safe_name]
+        else:
+            ws = wb.create_sheet(safe_name)
 
     existing = [ws.cell(1, c).value for c in range(1, ws.max_column + 1)]
     if not any(existing):
@@ -1007,6 +1059,13 @@ def _get_or_create_sheet(wb, sheet_name, headers):
 
     headers_clean = [str(h) if h is not None else "" for h in existing]
     return ws, headers_clean
+
+
+def _get_sheet_by_logical(wb, logical, headers):
+    name = _resolve_sheet_name(wb, logical)
+    ws, hdrs = _get_or_create_sheet(wb, name, headers)
+    return ws, hdrs, name
+
 
 def _append_rows(ws, rows, headers):
     for row in rows:
@@ -1027,92 +1086,438 @@ def _read_existing_match_ids(ws, headers):
         ids.add(str(val).strip())
     return ids
 
-def append_match_to_excel(overview, lanes_rows, output_path, logger=None):
+def _find_rows_by_match_id(ws, headers, match_id):
+    if not ws or not headers:
+        return []
+    try:
+        idx = headers.index("match_id") + 1
+    except ValueError:
+        return []
+    out = []
+    for row in ws.iter_rows(min_row=2):
+        cell = row[idx - 1]
+        val = cell.value
+        if val is None:
+            continue
+        if str(val).strip() == str(match_id).strip():
+            out.append((cell.row, [c.value for c in row]))
+    return out
+
+def _row_to_dict(headers, values):
+    out = {}
+    for i, h in enumerate(headers):
+        if i >= len(values):
+            out[h] = ""
+        else:
+            out[h] = values[i]
+    return out
+
+def _delete_rows(ws, row_indexes):
+    if not row_indexes:
+        return 0
+    count = 0
+    for r in sorted(set(row_indexes), reverse=True):
+        ws.delete_rows(r)
+        count += 1
+    return count
+
+def _delete_match_rows(ws, headers, match_id):
+    rows = _find_rows_by_match_id(ws, headers, match_id)
+    return _delete_rows(ws, [r for r, _ in rows])
+
+def _dedup_sheet(ws, headers, key_cols):
+    if not ws or not headers:
+        return 0
+    idxs = []
+    for c in key_cols:
+        if c in headers:
+            idxs.append(headers.index(c) + 1)
+    if not idxs:
+        return 0
+    seen = set()
+    to_delete = []
+    for row in ws.iter_rows(min_row=2):
+        key = []
+        for idx in idxs:
+            val = row[idx - 1].value
+            key.append(str(val).strip() if val is not None else "")
+        if not any(key):
+            continue
+        key = tuple(key)
+        if key in seen:
+            to_delete.append(row[0].row)
+        else:
+            seen.add(key)
+    return _delete_rows(ws, to_delete)
+
+def _is_missing_value(val):
+    if val is None:
+        return True
+    s = str(val).strip()
+    return s == "" or s == "?"
+
+
+def _is_summary_row_complete(row):
+    if not row:
+        return False
+    duration = row.get("duration")
+    score = row.get("score")
+    winner = row.get("winner")
+    winner_label = row.get(WINNER_COL)
+    error = row.get("error")
+    players_parsed = row.get("players_parsed")
+    try:
+        players_parsed = int(str(players_parsed).strip()) if players_parsed is not None else 0
+    except Exception:
+        players_parsed = 0
+
+    if error and str(error).strip():
+        return False
+    if _is_missing_value(duration) or _is_missing_value(score):
+        return False
+    if _is_missing_value(winner) and _is_missing_value(winner_label):
+        return False
+    if players_parsed and players_parsed < 10:
+        return False
+    return True
+
+
+def _count_rows_by_match_id(ws, headers, require_hero=True):
+    if not ws or not headers:
+        return {}
+    try:
+        idx_mid = headers.index("match_id")
+    except ValueError:
+        return {}
+    idx_hero = None
+    if require_hero:
+        try:
+            idx_hero = headers.index("hero")
+        except ValueError:
+            idx_hero = None
+    counts = {}
+    for row in ws.iter_rows(min_row=2, values_only=True):
+        if idx_mid >= len(row):
+            continue
+        mid = row[idx_mid]
+        if mid is None:
+            continue
+        if require_hero and idx_hero is not None:
+            if idx_hero >= len(row):
+                continue
+            hero = row[idx_hero]
+            if hero is None or str(hero).strip() == "":
+                continue
+        key = str(mid).strip()
+        counts[key] = counts.get(key, 0) + 1
+    return counts
+
+def _get_sheet_if_exists(wb, logical):
+    for name in SHEET_CANDIDATES.get(logical, []):
+        if name in wb.sheetnames:
+            return wb[name], name
+    return None, None
+
+
+def _scan_sheet_counts(ws, headers, required_cols):
+    if not ws or not headers:
+        return {}, {}
+    if "match_id" not in headers:
+        return {}, {}
+    idx_mid = headers.index("match_id")
+    idxs_req = [headers.index(c) for c in required_cols if c in headers]
+    counts = {}
+    missing = {}
+    for row in ws.iter_rows(min_row=2, values_only=True):
+        if idx_mid >= len(row):
+            continue
+        mid = row[idx_mid]
+        if mid is None:
+            continue
+        key = str(mid).strip()
+        counts[key] = counts.get(key, 0) + 1
+        if missing.get(key, False):
+            continue
+        for idx in idxs_req:
+            if idx >= len(row) or _is_missing_value(row[idx]):
+                missing[key] = True
+                break
+        else:
+            missing.setdefault(key, False)
+    return counts, missing
+
+
+def _scan_summary_sheet(ws, headers):
+    if not ws or not headers:
+        return {}, {}
+    if "match_id" not in headers:
+        return {}, {}
+    idx_mid = headers.index("match_id")
+    idx_duration = headers.index("duration") if "duration" in headers else None
+    idx_score = headers.index("score") if "score" in headers else None
+    idx_winner = headers.index("winner") if "winner" in headers else None
+    idx_winner_label = headers.index(WINNER_COL) if WINNER_COL in headers else None
+    idx_error = headers.index("error") if "error" in headers else None
+    idx_players = headers.index("players_parsed") if "players_parsed" in headers else None
+
+    counts = {}
+    missing = {}
+    for row in ws.iter_rows(min_row=2, values_only=True):
+        if idx_mid >= len(row):
+            continue
+        mid = row[idx_mid]
+        if mid is None:
+            continue
+        key = str(mid).strip()
+        counts[key] = counts.get(key, 0) + 1
+        if missing.get(key, False):
+            continue
+
+        def _val(idx):
+            if idx is None or idx >= len(row):
+                return None
+            return row[idx]
+
+        duration = _val(idx_duration)
+        score = _val(idx_score)
+        winner = _val(idx_winner)
+        winner_label = _val(idx_winner_label)
+        error = _val(idx_error)
+        players_val = _val(idx_players)
+
+        if error and str(error).strip():
+            missing[key] = True
+            continue
+        if _is_missing_value(duration) or _is_missing_value(score):
+            missing[key] = True
+            continue
+        if _is_missing_value(winner) and _is_missing_value(winner_label):
+            missing[key] = True
+            continue
+        if players_val is not None:
+            try:
+                if int(str(players_val).strip()) < 10:
+                    missing[key] = True
+                    continue
+            except Exception:
+                missing[key] = True
+                continue
+        missing.setdefault(key, False)
+
+    return counts, missing
+
+
+def analyze_existing_excel(path, logger=None):
+    if not Path(path).exists():
+        return {}
+    wb = load_workbook(path)
+
+    summary_counts = {}
+    summary_missing = {}
+    ws, _ = _get_sheet_if_exists(wb, "summary")
+    if ws is not None:
+        headers = [ws.cell(1, c).value for c in range(1, ws.max_column + 1)]
+        headers = [str(h) if h is not None else "" for h in headers]
+        summary_counts, summary_missing = _scan_summary_sheet(ws, headers)
+
+    players_counts = {}
+    players_missing = {}
+    ws, _ = _get_sheet_if_exists(wb, "players")
+    if ws is not None:
+        headers = [ws.cell(1, c).value for c in range(1, ws.max_column + 1)]
+        headers = [str(h) if h is not None else "" for h in headers]
+        players_counts, players_missing = _scan_sheet_counts(
+            ws,
+            headers,
+            ["team", "hero", "lane", "lane_role", "position"]
+        )
+
+    lanes_counts = {}
+    lanes_missing = {}
+    ws, _ = _get_sheet_if_exists(wb, "lanes")
+    if ws is not None:
+        headers = [ws.cell(1, c).value for c in range(1, ws.max_column + 1)]
+        headers = [str(h) if h is not None else "" for h in headers]
+        lanes_counts, lanes_missing = _scan_sheet_counts(
+            ws,
+            headers,
+            ["hero", "lane_outcome", "lane_detail", "lane_simple", "lane_side"]
+        )
+
+    status = {}
+    all_ids = set(summary_counts.keys()) | set(players_counts.keys()) | set(lanes_counts.keys())
+    for mid in all_ids:
+        summary_ok = summary_counts.get(mid, 0) >= 1 and not summary_missing.get(mid, True)
+        players_ok = players_counts.get(mid, 0) >= 10 and not players_missing.get(mid, True)
+        lanes_ok = lanes_counts.get(mid, 0) >= 10 and not lanes_missing.get(mid, True)
+        need_overview = not (summary_ok and players_ok)
+        need_lanes = not lanes_ok
+        status[mid] = {
+            "summary_ok": summary_ok,
+            "players_ok": players_ok,
+            "lanes_ok": lanes_ok,
+            "need_overview": need_overview,
+            "need_lanes": need_lanes,
+            "complete": (not need_overview and not need_lanes),
+        }
+
+    if logger:
+        total = len(status)
+        complete = sum(1 for v in status.values() if v.get("complete"))
+        logger.info(f"Existing Excel status: {complete}/{total} complete")
+    return status
+
+
+def deduplicate_excel(path, logger=None):
+    path = Path(path)
+    if not path.exists():
+        return 0
+    wb = load_workbook(path)
+    removed = 0
+
+    for logical, key_cols in (
+        ("summary", ["match_id"]),
+        ("players", ["match_id", "team", "hero"]),
+        ("lanes", ["match_id", "hero"]),
+        ("laning", ["match_id", "hero"]),
+        ("laning_all", ["match_id", "hero"]),
+    ):
+        ws, _ = _get_sheet_if_exists(wb, logical)
+        if ws is None:
+            continue
+        headers = [ws.cell(1, c).value for c in range(1, ws.max_column + 1)]
+        headers = [str(h) if h is not None else "" for h in headers]
+        removed += _dedup_sheet(ws, headers, key_cols)
+
+    if removed > 0:
+        wb.save(path)
+    if logger:
+        logger.info(f"Deduplicate Excel: removed {removed} rows")
+    return removed
+
+
+def update_match_in_excel(overview, lanes_rows, output_path, update_overview=True, update_lanes=True, logger=None):
     path = Path(output_path)
     if not path.exists():
-        save_to_excel([overview], [lanes_rows], path)
+        if not update_overview or overview is None:
+            raise ValueError("Excel does not exist; overview required to create file")
+        save_to_excel([overview], [lanes_rows or []], path)
         return True
 
     wb = load_workbook(path)
 
-    winner_val = overview.get("winner") or ""
-    winner_label = "Radiant (Светлая)" if winner_val == "Radiant" else "Dire (Тьма)" if winner_val == "Dire" else ""
-    summary_rows = [{
-        "match_id": overview.get("match_id"),
-        "duration": overview.get("duration", ""),
-        "score": overview.get("score", ""),
-        "победитель": winner_label,
-        "winner": winner_val,
-        "players_parsed": overview.get("players_count", 0),
-        "error": overview.get("error", ""),
-    }]
+    mid = str(overview.get("match_id") or "").strip() if overview else ""
+    if not mid and lanes_rows:
+        try:
+            mid = str((lanes_rows[0] or {}).get("match_id") or "").strip()
+        except Exception:
+            mid = ""
 
-    ws, headers = _get_or_create_sheet(wb, "Матчи_сводка", SUMMARY_COLS)
-    existing_ids = _read_existing_match_ids(ws, headers)
-    mid = str(overview.get("match_id") or "").strip()
-    if mid and mid in existing_ids:
-        if logger:
-            logger.info(f"Match {mid}: already in Excel, skip append")
-        return False
-    _append_rows(ws, summary_rows, headers)
+    if update_overview and overview is not None:
+        winner_val = overview.get("winner") or ""
+        winner_label = "Radiant (\u0421\u0432\u0435\u0442\u043b\u0430\u044f)" if winner_val == "Radiant" else "Dire (\u0422\u044c\u043c\u0430)" if winner_val == "Dire" else ""
+        summary_rows = [{
+            "match_id": overview.get("match_id"),
+            "duration": overview.get("duration", ""),
+            "score": overview.get("score", ""),
+            WINNER_COL: winner_label,
+            "winner": winner_val,
+            "players_parsed": overview.get("players_count", 0),
+            "error": overview.get("error", ""),
+        }]
 
-    players_rows = overview.get("players", []) or []
-    ws, headers = _get_or_create_sheet(wb, "Игроки_обзор", PLAYER_COLS)
-    _append_rows(ws, players_rows, headers)
+        ws, headers, _ = _get_sheet_by_logical(wb, "summary", SUMMARY_COLS)
+        if mid:
+            deleted = _delete_match_rows(ws, headers, mid)
+            if deleted and logger:
+                logger.info(f"Match {mid}: removed {deleted} summary rows before append")
+        _append_rows(ws, summary_rows, headers)
 
-    ws, headers = _get_or_create_sheet(wb, "Линии", LANES_RAW_COLS)
-    _append_rows(ws, lanes_rows, headers)
+        players_rows = overview.get("players", []) or []
+        ws, headers, _ = _get_sheet_by_logical(wb, "players", PLAYER_COLS)
+        if mid:
+            deleted = _delete_match_rows(ws, headers, mid)
+            if deleted and logger:
+                logger.info(f"Match {mid}: removed {deleted} player rows before append")
+        _append_rows(ws, players_rows, headers)
 
-    laning_stats = []
-    for r in lanes_rows:
-        laning_stats.append({
-            "match_id": r.get("match_id"),
-            "hero": r.get("hero"),
-            "lane_outcome": r.get("lane_outcome"),
-            "lane_team": r.get("lane_team"),
-            "lane_detail": r.get("lane_detail"),
-            "lane_simple": r.get("lane_simple"),
-            "lane_side": r.get("lane_side"),
-            "gpm_12": r.get("gpm_12"),
-            "xpm_12": r.get("xpm_12"),
-            "kills_12": r.get("k_12"),
-            "deaths_12": r.get("d_12"),
-            "assists_12": r.get("a_12"),
-            "lh_4": r.get("lh_4"),
-            "lh_8": r.get("lh_8"),
-            "lh_12": r.get("lh_12"),
-        })
+    if update_lanes and lanes_rows is not None:
+        ws, headers, _ = _get_sheet_by_logical(wb, "lanes", LANES_RAW_COLS)
+        if mid:
+            deleted = _delete_match_rows(ws, headers, mid)
+            if deleted and logger:
+                logger.info(f"Match {mid}: removed {deleted} lanes rows before append")
+        _append_rows(ws, lanes_rows, headers)
 
-    ws, headers = _get_or_create_sheet(wb, "Лайнинг_статистика", LANING_COLS)
-    _append_rows(ws, laning_stats, headers)
-    ws, headers = _get_or_create_sheet(wb, "Лайнинг_вся_статистика", LANING_COLS)
-    _append_rows(ws, laning_stats, headers)
+        laning_stats = []
+        for r in lanes_rows:
+            laning_stats.append({
+                "match_id": r.get("match_id"),
+                "hero": r.get("hero"),
+                "lane_outcome": r.get("lane_outcome"),
+                "lane_team": r.get("lane_team"),
+                "lane_detail": r.get("lane_detail"),
+                "lane_simple": r.get("lane_simple"),
+                "lane_side": r.get("lane_side"),
+                "gpm_12": r.get("gpm_12"),
+                "xpm_12": r.get("xpm_12"),
+                "kills_12": r.get("k_12"),
+                "deaths_12": r.get("d_12"),
+                "assists_12": r.get("a_12"),
+                "lh_4": r.get("lh_4"),
+                "lh_8": r.get("lh_8"),
+                "lh_12": r.get("lh_12"),
+            })
+
+        ws, headers, _ = _get_sheet_by_logical(wb, "laning", LANING_COLS)
+        if mid:
+            deleted = _delete_match_rows(ws, headers, mid)
+            if deleted and logger:
+                logger.info(f"Match {mid}: removed {deleted} laning rows before append")
+        _append_rows(ws, laning_stats, headers)
+
+        ws, headers, _ = _get_sheet_by_logical(wb, "laning_all", LANING_COLS)
+        if mid:
+            deleted = _delete_match_rows(ws, headers, mid)
+            if deleted and logger:
+                logger.info(f"Match {mid}: removed {deleted} full laning rows before append")
+        _append_rows(ws, laning_stats, headers)
 
     wb.save(path)
     return True
 
 
+def append_match_to_excel(overview, lanes_rows, output_path, logger=None):
+    return update_match_in_excel(overview, lanes_rows, output_path, update_overview=True, update_lanes=True, logger=logger)
+
+
 def save_to_excel(matches_overview, matches_lanes, output_path):
-    """Сохранить данные в Excel:
-    - Матчи_сводка
-    - Игроки_обзор
-    - Линии (сырые строки из вкладки /lanes)
-    - Лайнинг_статистика (полная нормализованная стадия лайнинга)
+    """Save data to Excel:
+    - Matches_Summary
+    - Players_Overview
+    - Lanes_Raw
+    - Laning_Stats
     """
     path = Path(output_path)
     path.parent.mkdir(parents=True, exist_ok=True)
 
+    sheet_summary = DEFAULT_SHEETS["summary"]
+    sheet_players = DEFAULT_SHEETS["players"]
+    sheet_lanes = DEFAULT_SHEETS["lanes"]
+    sheet_laning = DEFAULT_SHEETS["laning"]
+    sheet_laning_all = DEFAULT_SHEETS["laning_all"]
+
     with pd.ExcelWriter(path, engine="openpyxl") as w:
-        # --- Матчи_сводка ---
+        # --- summary ---
         summary_rows = []
         for m in matches_overview:
             winner_val = m.get("winner") or ""
-            winner_label = "Radiant (Светлая)" if winner_val == "Radiant" else "Dire (Тьма)" if winner_val == "Dire" else ""
+            winner_label = "Radiant (\u0421\u0432\u0435\u0442\u043b\u0430\u044f)" if winner_val == "Radiant" else "Dire (\u0422\u044c\u043c\u0430)" if winner_val == "Dire" else ""
             summary_rows.append({
                 "match_id": m.get("match_id"),
                 "duration": m.get("duration", ""),
                 "score": m.get("score", ""),
-                "победитель": winner_label,
+                WINNER_COL: winner_label,
                 "winner": winner_val,
                 "players_parsed": m.get("players_count", 0),
                 "error": m.get("error", ""),
@@ -1123,9 +1528,9 @@ def save_to_excel(matches_overview, matches_lanes, output_path):
                 if col not in df_summary.columns:
                     df_summary[col] = ""
             df_summary = df_summary[SUMMARY_COLS]
-            df_summary.to_excel(w, sheet_name="Матчи_сводка", index=False)
+            df_summary.to_excel(w, sheet_name=sheet_summary, index=False)
 
-        # --- Игроки_обзор ---
+        # --- players ---
         all_players = []
         for m in matches_overview:
             all_players.extend(m.get("players", []))
@@ -1135,9 +1540,9 @@ def save_to_excel(matches_overview, matches_lanes, output_path):
                 if col not in df_players.columns:
                     df_players[col] = ""
             df_players = df_players[PLAYER_COLS]
-            df_players.to_excel(w, sheet_name="Игроки_обзор", index=False)
+            df_players.to_excel(w, sheet_name=sheet_players, index=False)
 
-        # --- Линии (сырое) ---
+        # --- lanes raw ---
         flat_lanes = [row for rows in matches_lanes for row in rows]
         if flat_lanes:
             df_lanes = pd.DataFrame(flat_lanes)
@@ -1145,9 +1550,9 @@ def save_to_excel(matches_overview, matches_lanes, output_path):
                 if col not in df_lanes.columns:
                     df_lanes[col] = ""
             df_lanes = df_lanes[LANES_RAW_COLS]
-            df_lanes.to_excel(w, sheet_name="Линии", index=False)
+            df_lanes.to_excel(w, sheet_name=sheet_lanes, index=False)
 
-        # --- Лайнинг_статистика (полная стадия) ---
+        # --- laning stats ---
         laning_stats = []
         for rows in matches_lanes:
             for r in rows:
@@ -1177,10 +1582,12 @@ def save_to_excel(matches_overview, matches_lanes, output_path):
                     df_laning[c] = ""
             df_laning = df_laning[LANING_COLS]
 
-        df_laning.to_excel(w, sheet_name="Лайнинг_статистика", index=False)
-        df_laning.to_excel(w, sheet_name="Лайнинг_вся_статистика", index=False)
+        df_laning.to_excel(w, sheet_name=sheet_laning, index=False)
+        df_laning.to_excel(w, sheet_name=sheet_laning_all, index=False)
 
-    print(f"Сохранено: {path.absolute()}")
+    print(f"Saved: {path.absolute()}")
+
+
 
 
 def main():
@@ -1196,6 +1603,8 @@ def main():
     parser.add_argument("--start", type=int, default=1, help="Стартовый номер матча (1-based)")
     parser.add_argument("--match-timeout", type=int, default=300, help="Макс. время на матч (сек)")
     parser.add_argument("--page-timeout-ms", type=int, default=120000, help="Макс. время на загрузку одной страницы (мс)")
+    parser.add_argument("--page-retries", type=int, default=2, help="Кол-во повторов загрузки страницы при ошибках/таймаутах")
+    parser.add_argument("--retry-wait", type=float, default=2.0, help="Пауза между повторами (сек)")
     parser.add_argument("--no-save-each", action="store_true", help="Не сохранять в Excel после каждого матча")
     parser.add_argument("--log", default="", help="Путь к лог-файлу")
     parser.add_argument("--headed", action="store_true")
@@ -1207,6 +1616,21 @@ def main():
     save_each = not args.no_save_each
     log_path = args.log or str(Path(__file__).resolve().parent / "parser.log")
     logger = init_logging(log_path)
+
+    existing_status = {}
+    if output_excel.exists() and not save_each:
+        logger.warning("Output Excel exists; forcing save_each to avoid data loss")
+        save_each = True
+
+    if save_each and output_excel.exists():
+        try:
+            deduplicate_excel(output_excel, logger=logger)
+        except Exception as e:
+            logger.warning(f"Excel dedup failed: {e}")
+        try:
+            existing_status = analyze_existing_excel(output_excel, logger=logger)
+        except Exception as e:
+            logger.warning(f"Excel analyze failed: {e}")
 
     match_ids = load_match_ids(args.csv)
     if args.limit and args.limit > 0:
@@ -1230,6 +1654,26 @@ def main():
     debug_dir = Path(__file__).resolve().parent / "debug_html"
     debug_dir.mkdir(exist_ok=True)
 
+    def fetch_with_retries(url, save_debug_path=None):
+        last_err = None
+        attempts = max(1, int(args.page_retries or 0)) + 1
+        for attempt in range(1, attempts + 1):
+            try:
+                return fetch_dotabuff_with_playwright(
+                    url,
+                    save_debug_path=save_debug_path,
+                    headed=args.headed,
+                    max_total_ms=int(args.page_timeout_ms * attempt),
+                    logger=logger
+                )
+            except Exception as e:
+                last_err = e
+                if attempt >= attempts:
+                    break
+                logger.warning(f"Fetch retry {attempt}/{attempts} for {url}: {e}")
+                time.sleep(max(0.1, float(args.retry_wait)) * attempt)
+        raise last_err
+
     matches_overview = []
     matches_lanes = []
 
@@ -1237,6 +1681,18 @@ def main():
         mid = str(mid).strip()
         if not mid:
             continue
+        status = existing_status.get(mid) if save_each else None
+        need_overview = True
+        need_lanes = True
+        if status:
+            need_overview = status.get("need_overview", True)
+            need_lanes = status.get("need_lanes", True)
+            if not need_overview and not need_lanes:
+                logger.info(f"[{i+1}/{len(match_ids)}] Match {mid} SKIP (already complete)")
+                continue
+            if not status.get("complete"):
+                logger.info(f"[{i+1}/{len(match_ids)}] Match {mid} INCOMPLETE -> reparse")
+
         match_start = time.monotonic()
         def _check_match_timeout(stage):
             if args.match_timeout and args.match_timeout > 0:
@@ -1247,51 +1703,51 @@ def main():
         url_lanes = f"{BASE_URL}/matches/{mid}/lanes"
 
         save_debug = str(debug_dir / f"match_{mid}_overview.html") if i == 0 else None
-        try:
-            logger.info(f"Match {mid}: fetch overview")
-            _check_match_timeout("fetch_overview")
-            html_overview = fetch_dotabuff_with_playwright(
-                url_overview,
-                save_debug_path=save_debug,
-                headed=args.headed,
-                max_total_ms=args.page_timeout_ms,
-                logger=logger
-            )
-            logger.info(f"Match {mid}: parse overview")
-            _check_match_timeout("parse_overview")
-            overview = parse_overview(html_overview, mid)
-            matches_overview.append(overview)
-        except Exception as e:
-            logger.error(f"Ошибка загрузки overview {mid}: {e}")
-            continue
+        overview = None
+        lanes_rows = None
 
-        time.sleep(random.uniform(2.0, 4.0))
+        if need_overview:
+            try:
+                logger.info(f"Match {mid}: fetch overview")
+                _check_match_timeout("fetch_overview")
+                html_overview = fetch_with_retries(url_overview, save_debug_path=save_debug)
+                logger.info(f"Match {mid}: parse overview")
+                _check_match_timeout("parse_overview")
+                overview = parse_overview(html_overview, mid)
+                matches_overview.append(overview)
+            except Exception as e:
+                logger.error(f"?????? ???????? overview {mid}: {e}")
 
-        try:
-            logger.info(f"Match {mid}: fetch lanes")
-            _check_match_timeout("fetch_lanes")
-            html_lanes = fetch_dotabuff_with_playwright(
-                url_lanes,
-                headed=args.headed,
-                max_total_ms=args.page_timeout_ms,
-                logger=logger
-            )
-            logger.info(f"Match {mid}: parse lanes")
-            _check_match_timeout("parse_lanes")
-            lanes_rows = parse_lanes_tab(html_lanes, mid)
-            matches_lanes.append(lanes_rows)
+            time.sleep(random.uniform(2.0, 4.0))
 
-        except Exception as e:
-            logger.error(f"Ошибка загрузки lanes {mid}: {e}")
-            lanes_rows = []
-            matches_lanes.append([])   # чтобы не ломалась структура
+        if need_lanes:
+            try:
+                logger.info(f"Match {mid}: fetch lanes")
+                _check_match_timeout("fetch_lanes")
+                html_lanes = fetch_with_retries(url_lanes)
+                logger.info(f"Match {mid}: parse lanes")
+                _check_match_timeout("parse_lanes")
+                lanes_rows = parse_lanes_tab(html_lanes, mid)
+                matches_lanes.append(lanes_rows)
+
+            except Exception as e:
+                logger.error(f"?????? ???????? lanes {mid}: {e}")
+                lanes_rows = []
+                matches_lanes.append([])
 
         if save_each:
             try:
-                logger.info(f"Match {mid}: append to Excel")
-                append_match_to_excel(overview, lanes_rows, output_excel, logger=logger)
+                logger.info(f"Match {mid}: update Excel")
+                update_match_in_excel(
+                    overview,
+                    lanes_rows,
+                    output_excel,
+                    update_overview=bool(need_overview and overview is not None),
+                    update_lanes=bool(need_lanes and lanes_rows is not None),
+                    logger=logger
+                )
             except Exception as e:
-                logger.error(f"Ошибка записи Excel для {mid}: {e}")
+                logger.error(f"?????? ?????? Excel ??? {mid}: {e}")
 
         elapsed = time.monotonic() - match_start
         logger.info(f"[{i+1}/{len(match_ids)}] Match {mid} DONE in {elapsed:.1f}s")
