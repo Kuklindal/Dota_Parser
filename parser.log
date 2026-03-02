@@ -26441,3 +26441,224 @@
 2026-03-01 19:30:39,736 | INFO | [125/3609] Match 8609379925 INCOMPLETE -> reparse
 2026-03-01 19:30:39,736 | INFO | [125/3609] Match 8609379925 START
 2026-03-01 19:30:39,736 | INFO | Match 8609379925: fetch lanes
+2026-03-02 01:19:51,422 | INFO | Deduplicate Excel: removed 0 rows
+2026-03-02 01:20:09,433 | INFO | Existing Excel status: 976/3554 complete
+2026-03-02 01:20:09,444 | INFO | Матчей к обработке: 3609
+2026-03-02 01:20:09,444 | INFO | [1/3609] Match 8609332493 INCOMPLETE -> reparse
+2026-03-02 01:20:09,444 | INFO | [1/3609] Match 8609332493 START
+2026-03-02 01:20:09,444 | INFO | Match 8609332493: fetch overview
+2026-03-02 01:20:19,736 | INFO | Match 8609332493: parse overview
+2026-03-02 01:20:25,235 | INFO | Match 8609332493: update Excel
+2026-03-02 01:20:42,761 | INFO | Match 8609332493: removed 1 summary rows before append
+2026-03-02 01:20:45,889 | INFO | Match 8609332493: removed 10 player rows before append
+2026-03-02 01:20:54,953 | INFO | [1/3609] Match 8609332493 DONE in 45.5s
+2026-03-02 01:20:58,741 | INFO | [2/3609] Match 8609356930 INCOMPLETE -> reparse
+2026-03-02 01:20:58,741 | INFO | [2/3609] Match 8609356930 START
+2026-03-02 01:20:58,741 | INFO | Match 8609356930: fetch overview
+2026-03-02 01:21:08,558 | INFO | Match 8609356930: parse overview
+2026-03-02 01:21:12,550 | INFO | Match 8609356930: fetch lanes
+2026-03-02 01:23:35,017 | INFO | Match 8609356930: parse lanes
+2026-03-02 01:23:35,019 | INFO | Match 8609356930: update Excel
+2026-03-02 01:23:51,518 | INFO | Match 8609356930: removed 1 summary rows before append
+2026-03-02 01:23:54,217 | INFO | Match 8609356930: removed 10 player rows before append
+2026-03-02 01:24:03,839 | INFO | [2/3609] Match 8609356930 DONE in 185.1s
+2026-03-02 01:24:07,483 | INFO | [3/3609] Match 8609337846 INCOMPLETE -> reparse
+2026-03-02 01:24:07,483 | INFO | [3/3609] Match 8609337846 START
+2026-03-02 01:24:07,483 | INFO | Match 8609337846: fetch overview
+2026-03-02 01:24:17,794 | INFO | Match 8609337846: parse overview
+2026-03-02 01:24:24,169 | INFO | Match 8609337846: fetch lanes
+2026-03-02 01:26:46,561 | INFO | Match 8609337846: parse lanes
+2026-03-02 01:26:46,562 | INFO | Match 8609337846: update Excel
+2026-03-02 01:27:00,501 | INFO | Match 8609337846: removed 1 summary rows before append
+2026-03-02 01:27:03,188 | INFO | Match 8609337846: removed 10 player rows before append
+2026-03-02 01:27:12,942 | INFO | [3/3609] Match 8609337846 DONE in 185.5s
+2026-03-02 01:27:15,196 | INFO | [4/3609] Match 8609342520 SKIP (already complete)
+2026-03-02 01:27:15,197 | INFO | [5/3609] Match 8609347733 INCOMPLETE -> reparse
+2026-03-02 01:27:15,197 | INFO | [5/3609] Match 8609347733 START
+2026-03-02 01:27:15,197 | INFO | Match 8609347733: fetch overview
+2026-03-02 01:27:25,018 | INFO | Match 8609347733: parse overview
+2026-03-02 01:27:30,905 | INFO | Match 8609347733: update Excel
+2026-03-02 01:27:45,146 | INFO | Match 8609347733: removed 1 summary rows before append
+2026-03-02 01:27:47,877 | INFO | Match 8609347733: removed 10 player rows before append
+2026-03-02 01:27:57,047 | INFO | [5/3609] Match 8609347733 DONE in 41.8s
+2026-03-02 01:28:01,003 | INFO | [6/3609] Match 8609333981 INCOMPLETE -> reparse
+2026-03-02 01:28:01,003 | INFO | [6/3609] Match 8609333981 START
+2026-03-02 01:28:01,003 | INFO | Match 8609333981: fetch overview
+2026-03-02 01:28:11,664 | INFO | Match 8609333981: parse overview
+2026-03-02 01:28:18,554 | INFO | Match 8609333981: update Excel
+2026-03-02 01:28:33,782 | INFO | Match 8609333981: removed 1 summary rows before append
+2026-03-02 01:28:36,870 | INFO | Match 8609333981: removed 10 player rows before append
+2026-03-02 01:28:46,649 | INFO | [6/3609] Match 8609333981 DONE in 45.6s
+2026-03-02 01:28:49,119 | INFO | [7/3609] Match 8609309113 INCOMPLETE -> reparse
+2026-03-02 01:28:49,119 | INFO | [7/3609] Match 8609309113 START
+2026-03-02 01:28:49,119 | INFO | Match 8609309113: fetch overview
+2026-03-02 01:28:59,476 | INFO | Match 8609309113: parse overview
+2026-03-02 01:29:06,912 | INFO | Match 8609309113: fetch lanes
+2026-03-02 01:31:29,076 | INFO | Match 8609309113: parse lanes
+2026-03-02 01:31:29,077 | INFO | Match 8609309113: update Excel
+2026-03-02 01:31:43,203 | INFO | Match 8609309113: removed 1 summary rows before append
+2026-03-02 01:31:45,889 | INFO | Match 8609309113: removed 10 player rows before append
+2026-03-02 01:31:55,577 | INFO | [7/3609] Match 8609309113 DONE in 186.5s
+2026-03-02 01:31:58,942 | INFO | [8/3609] Match 8609327418 INCOMPLETE -> reparse
+2026-03-02 01:31:58,942 | INFO | [8/3609] Match 8609327418 START
+2026-03-02 01:31:58,942 | INFO | Match 8609327418: fetch overview
+2026-03-02 01:32:08,942 | INFO | Match 8609327418: parse overview
+2026-03-02 01:32:16,897 | INFO | Match 8609327418: fetch lanes
+2026-03-02 01:34:39,038 | INFO | Match 8609327418: parse lanes
+2026-03-02 01:34:39,039 | INFO | Match 8609327418: update Excel
+2026-03-02 01:34:53,257 | INFO | Match 8609327418: removed 1 summary rows before append
+2026-03-02 01:34:55,929 | INFO | Match 8609327418: removed 10 player rows before append
+2026-03-02 01:35:05,539 | INFO | [8/3609] Match 8609327418 DONE in 186.6s
+2026-03-02 01:35:09,252 | INFO | [9/3609] Match 8609330611 INCOMPLETE -> reparse
+2026-03-02 01:35:09,252 | INFO | [9/3609] Match 8609330611 START
+2026-03-02 01:35:09,253 | INFO | Match 8609330611: fetch overview
+2026-03-02 01:35:19,856 | INFO | Match 8609330611: parse overview
+2026-03-02 01:35:27,688 | INFO | Match 8609330611: update Excel
+2026-03-02 01:35:43,421 | INFO | Match 8609330611: removed 1 summary rows before append
+2026-03-02 01:35:46,061 | INFO | Match 8609330611: removed 10 player rows before append
+2026-03-02 01:35:55,286 | INFO | [9/3609] Match 8609330611 DONE in 46.0s
+2026-03-02 01:35:58,719 | INFO | [10/3609] Match 8609343392 SKIP (already complete)
+2026-03-02 01:35:58,719 | INFO | [11/3609] Match 8609322311 INCOMPLETE -> reparse
+2026-03-02 01:35:58,720 | INFO | [11/3609] Match 8609322311 START
+2026-03-02 01:35:58,720 | INFO | Match 8609322311: fetch overview
+2026-03-02 01:36:07,977 | INFO | Match 8609322311: parse overview
+2026-03-02 01:36:15,774 | INFO | Match 8609322311: update Excel
+2026-03-02 01:36:29,988 | INFO | Match 8609322311: removed 1 summary rows before append
+2026-03-02 01:36:32,664 | INFO | Match 8609322311: removed 10 player rows before append
+2026-03-02 01:36:42,582 | INFO | [11/3609] Match 8609322311 DONE in 43.9s
+2026-03-02 01:36:45,801 | INFO | [12/3609] Match 8609354894 SKIP (already complete)
+2026-03-02 01:36:45,802 | INFO | [13/3609] Match 8609339120 SKIP (already complete)
+2026-03-02 01:36:45,802 | INFO | [14/3609] Match 8609359027 SKIP (already complete)
+2026-03-02 01:36:45,803 | INFO | [15/3609] Match 8609293869 SKIP (already complete)
+2026-03-02 01:36:45,803 | INFO | [16/3609] Match 8609289032 INCOMPLETE -> reparse
+2026-03-02 01:36:45,803 | INFO | [16/3609] Match 8609289032 START
+2026-03-02 01:36:45,803 | INFO | Match 8609289032: fetch overview
+2026-03-02 01:36:56,589 | INFO | Match 8609289032: parse overview
+2026-03-02 01:37:05,842 | INFO | Match 8609289032: fetch lanes
+2026-03-02 01:39:28,648 | INFO | Match 8609289032: parse lanes
+2026-03-02 01:39:28,649 | INFO | Match 8609289032: update Excel
+2026-03-02 01:39:42,725 | INFO | Match 8609289032: removed 1 summary rows before append
+2026-03-02 01:39:45,374 | INFO | Match 8609289032: removed 10 player rows before append
+2026-03-02 01:39:55,071 | INFO | [16/3609] Match 8609289032 DONE in 189.3s
+2026-03-02 01:39:57,410 | INFO | [17/3609] Match 8609320040 SKIP (already complete)
+2026-03-02 01:39:57,411 | INFO | [18/3609] Match 8609296706 INCOMPLETE -> reparse
+2026-03-02 01:39:57,411 | INFO | [18/3609] Match 8609296706 START
+2026-03-02 01:39:57,411 | INFO | Match 8609296706: fetch overview
+2026-03-02 01:40:08,174 | INFO | Match 8609296706: parse overview
+2026-03-02 01:40:16,510 | INFO | Match 8609296706: fetch lanes
+2026-03-02 01:40:24,889 | INFO | Match 8609296706: parse lanes
+2026-03-02 01:40:24,942 | INFO | Match 8609296706: update Excel
+2026-03-02 01:40:39,345 | INFO | Match 8609296706: removed 1 summary rows before append
+2026-03-02 01:40:41,942 | INFO | Match 8609296706: removed 10 player rows before append
+2026-03-02 01:40:43,082 | INFO | Match 8609296706: removed 10 lanes rows before append
+2026-03-02 01:40:44,114 | INFO | Match 8609296706: removed 10 laning rows before append
+2026-03-02 01:40:45,096 | INFO | Match 8609296706: removed 10 full laning rows before append
+2026-03-02 01:40:54,559 | INFO | [18/3609] Match 8609296706 DONE in 57.1s
+2026-03-02 01:40:57,390 | INFO | [19/3609] Match 8609342401 SKIP (already complete)
+2026-03-02 01:40:57,391 | INFO | [20/3609] Match 8609336942 INCOMPLETE -> reparse
+2026-03-02 01:40:57,391 | INFO | [20/3609] Match 8609336942 START
+2026-03-02 01:40:57,391 | INFO | Match 8609336942: fetch overview
+2026-03-02 01:41:06,626 | INFO | Match 8609336942: parse overview
+2026-03-02 01:41:13,339 | INFO | Match 8609336942: fetch lanes
+2026-03-02 01:43:35,625 | INFO | Match 8609336942: parse lanes
+2026-03-02 01:43:35,627 | INFO | Match 8609336942: update Excel
+2026-03-02 01:43:49,663 | INFO | Match 8609336942: removed 1 summary rows before append
+2026-03-02 01:43:52,345 | INFO | Match 8609336942: removed 10 player rows before append
+2026-03-02 01:44:02,007 | INFO | [20/3609] Match 8609336942 DONE in 184.6s
+2026-03-02 01:44:04,747 | INFO | [21/3609] Match 8609287249 SKIP (already complete)
+2026-03-02 01:44:04,748 | INFO | [22/3609] Match 8609326024 INCOMPLETE -> reparse
+2026-03-02 01:44:04,748 | INFO | [22/3609] Match 8609326024 START
+2026-03-02 01:44:04,748 | INFO | Match 8609326024: fetch overview
+2026-03-02 01:44:14,744 | INFO | Match 8609326024: parse overview
+2026-03-02 01:44:21,675 | INFO | Match 8609326024: fetch lanes
+2026-03-02 01:46:44,045 | INFO | Match 8609326024: parse lanes
+2026-03-02 01:46:44,047 | INFO | Match 8609326024: update Excel
+2026-03-02 01:46:58,280 | INFO | Match 8609326024: removed 1 summary rows before append
+2026-03-02 01:47:00,925 | INFO | Match 8609326024: removed 10 player rows before append
+2026-03-02 01:47:11,031 | INFO | [22/3609] Match 8609326024 DONE in 186.3s
+2026-03-02 01:47:14,100 | INFO | [23/3609] Match 8609338684 INCOMPLETE -> reparse
+2026-03-02 01:47:14,100 | INFO | [23/3609] Match 8609338684 START
+2026-03-02 01:47:14,100 | INFO | Match 8609338684: fetch overview
+2026-03-02 01:47:23,858 | INFO | Match 8609338684: parse overview
+2026-03-02 01:47:30,944 | INFO | Match 8609338684: update Excel
+2026-03-02 01:47:44,958 | INFO | Match 8609338684: removed 1 summary rows before append
+2026-03-02 01:47:47,618 | INFO | Match 8609338684: removed 10 player rows before append
+2026-03-02 01:47:56,737 | INFO | [23/3609] Match 8609338684 DONE in 42.6s
+2026-03-02 01:48:00,407 | INFO | [24/3609] Match 8609353716 SKIP (already complete)
+2026-03-02 01:48:00,407 | INFO | [25/3609] Match 8609331049 INCOMPLETE -> reparse
+2026-03-02 01:48:00,407 | INFO | [25/3609] Match 8609331049 START
+2026-03-02 01:48:00,407 | INFO | Match 8609331049: fetch overview
+2026-03-02 01:48:10,425 | INFO | Match 8609331049: parse overview
+2026-03-02 01:48:17,295 | INFO | Match 8609331049: fetch lanes
+2026-03-02 01:50:40,612 | INFO | Match 8609331049: parse lanes
+2026-03-02 01:50:40,616 | INFO | Match 8609331049: update Excel
+2026-03-02 01:50:54,875 | INFO | Match 8609331049: removed 1 summary rows before append
+2026-03-02 01:50:57,515 | INFO | Match 8609331049: removed 10 player rows before append
+2026-03-02 01:51:07,108 | INFO | [25/3609] Match 8609331049 DONE in 186.7s
+2026-03-02 01:51:09,987 | INFO | [26/3609] Match 8609345440 INCOMPLETE -> reparse
+2026-03-02 01:51:09,987 | INFO | [26/3609] Match 8609345440 START
+2026-03-02 01:51:09,987 | INFO | Match 8609345440: fetch overview
+2026-03-02 01:51:20,127 | INFO | Match 8609345440: parse overview
+2026-03-02 01:51:26,861 | INFO | Match 8609345440: update Excel
+2026-03-02 01:51:40,948 | INFO | Match 8609345440: removed 1 summary rows before append
+2026-03-02 01:51:43,556 | INFO | Match 8609345440: removed 10 player rows before append
+2026-03-02 01:51:52,776 | INFO | [26/3609] Match 8609345440 DONE in 42.8s
+2026-03-02 01:51:55,392 | INFO | [27/3609] Match 8609347884 SKIP (already complete)
+2026-03-02 01:51:55,392 | INFO | [28/3609] Match 8609344036 SKIP (already complete)
+2026-03-02 01:51:55,393 | INFO | [29/3609] Match 8609356278 SKIP (already complete)
+2026-03-02 01:51:55,393 | INFO | [30/3609] Match 8609354135 SKIP (already complete)
+2026-03-02 01:51:55,393 | INFO | [31/3609] Match 8609353546 SKIP (already complete)
+2026-03-02 01:51:55,393 | INFO | [32/3609] Match 8609339594 INCOMPLETE -> reparse
+2026-03-02 01:51:55,393 | INFO | [32/3609] Match 8609339594 START
+2026-03-02 01:51:55,393 | INFO | Match 8609339594: fetch overview
+2026-03-02 01:52:06,008 | INFO | Match 8609339594: parse overview
+2026-03-02 01:52:14,013 | INFO | Match 8609339594: fetch lanes
+2026-03-02 01:54:36,193 | INFO | Match 8609339594: parse lanes
+2026-03-02 01:54:36,196 | INFO | Match 8609339594: update Excel
+2026-03-02 01:54:50,653 | INFO | Match 8609339594: removed 1 summary rows before append
+2026-03-02 01:54:53,434 | INFO | Match 8609339594: removed 10 player rows before append
+2026-03-02 01:55:03,205 | INFO | [32/3609] Match 8609339594 DONE in 187.8s
+2026-03-02 01:55:06,403 | INFO | [33/3609] Match 8609327702 INCOMPLETE -> reparse
+2026-03-02 01:55:06,403 | INFO | [33/3609] Match 8609327702 START
+2026-03-02 01:55:06,404 | INFO | Match 8609327702: fetch overview
+2026-03-02 01:55:16,971 | INFO | Match 8609327702: parse overview
+2026-03-02 01:55:24,286 | INFO | Match 8609327702: fetch lanes
+2026-03-02 01:57:46,516 | INFO | Match 8609327702: parse lanes
+2026-03-02 01:57:46,518 | INFO | Match 8609327702: update Excel
+2026-03-02 01:58:01,544 | INFO | Match 8609327702: removed 1 summary rows before append
+2026-03-02 01:58:04,730 | INFO | Match 8609327702: removed 10 player rows before append
+2026-03-02 01:58:14,626 | INFO | [33/3609] Match 8609327702 DONE in 188.2s
+2026-03-02 01:58:17,911 | INFO | [34/3609] Match 8609354475 SKIP (already complete)
+2026-03-02 01:58:17,911 | INFO | [35/3609] Match 8609343565 INCOMPLETE -> reparse
+2026-03-02 01:58:17,911 | INFO | [35/3609] Match 8609343565 START
+2026-03-02 01:58:17,911 | INFO | Match 8609343565: fetch overview
+2026-03-02 01:58:28,238 | INFO | Match 8609343565: parse overview
+2026-03-02 01:58:34,073 | INFO | Match 8609343565: fetch lanes
+2026-03-02 02:00:57,287 | INFO | Match 8609343565: parse lanes
+2026-03-02 02:00:57,292 | INFO | Match 8609343565: update Excel
+2026-03-02 02:01:11,719 | INFO | Match 8609343565: removed 1 summary rows before append
+2026-03-02 02:01:14,352 | INFO | Match 8609343565: removed 10 player rows before append
+2026-03-02 02:01:23,943 | INFO | [35/3609] Match 8609343565 DONE in 186.0s
+2026-03-02 02:01:26,698 | INFO | [36/3609] Match 8609334573 INCOMPLETE -> reparse
+2026-03-02 02:01:26,698 | INFO | [36/3609] Match 8609334573 START
+2026-03-02 02:01:26,698 | INFO | Match 8609334573: fetch overview
+2026-03-02 02:01:36,223 | INFO | Match 8609334573: parse overview
+2026-03-02 02:01:43,468 | INFO | Match 8609334573: fetch lanes
+2026-03-02 02:04:07,374 | INFO | Match 8609334573: parse lanes
+2026-03-02 02:04:07,378 | INFO | Match 8609334573: update Excel
+2026-03-02 02:04:22,005 | INFO | Match 8609334573: removed 1 summary rows before append
+2026-03-02 02:04:24,632 | INFO | Match 8609334573: removed 10 player rows before append
+2026-03-02 02:04:34,704 | INFO | [36/3609] Match 8609334573 DONE in 188.0s
+2026-03-02 02:04:37,453 | INFO | [37/3609] Match 8609319106 INCOMPLETE -> reparse
+2026-03-02 02:04:37,453 | INFO | [37/3609] Match 8609319106 START
+2026-03-02 02:04:37,453 | INFO | Match 8609319106: fetch overview
+2026-03-02 02:04:46,951 | INFO | Match 8609319106: parse overview
+2026-03-02 02:04:55,660 | INFO | Match 8609319106: fetch lanes
+2026-03-02 02:07:18,777 | INFO | Match 8609319106: parse lanes
+2026-03-02 02:07:18,781 | INFO | Match 8609319106: update Excel
+2026-03-02 02:07:34,036 | INFO | Match 8609319106: removed 1 summary rows before append
+2026-03-02 02:07:37,265 | INFO | Match 8609319106: removed 10 player rows before append
+2026-03-02 02:07:47,647 | INFO | [37/3609] Match 8609319106 DONE in 190.2s
+2026-03-02 02:07:50,978 | INFO | [38/3609] Match 8609346272 INCOMPLETE -> reparse
+2026-03-02 02:07:50,978 | INFO | [38/3609] Match 8609346272 START
+2026-03-02 02:07:50,978 | INFO | Match 8609346272: fetch overview
