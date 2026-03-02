@@ -26662,3 +26662,28 @@
 2026-03-02 02:07:50,978 | INFO | [38/3609] Match 8609346272 INCOMPLETE -> reparse
 2026-03-02 02:07:50,978 | INFO | [38/3609] Match 8609346272 START
 2026-03-02 02:07:50,978 | INFO | Match 8609346272: fetch overview
+2026-03-02 09:30:06,950 | INFO | Deduplicate Excel: removed 0 rows
+2026-03-02 09:30:23,720 | INFO | Existing Excel status: 1254/3554 complete
+2026-03-02 09:30:23,720 | INFO | Обрабатываем первые 1 матчей
+2026-03-02 09:30:23,720 | INFO | Матчей к обработке: 1
+2026-03-02 09:30:23,732 | INFO | [1/1] Match 8609319106 INCOMPLETE -> reparse
+2026-03-02 09:30:23,732 | INFO | [1/1] Match 8609319106 START
+2026-03-02 09:30:23,732 | INFO | Match 8609319106: fetch lanes
+2026-03-02 09:30:53,931 | WARNING | Fetch retry 1/2 for https://ru.dotabuff.com/matches/8609319106/lanes: Timeout while loading https://ru.dotabuff.com/matches/8609319106/lanes
+2026-03-02 09:31:56,138 | ERROR | ?????? ???????? lanes 8609319106: Timeout while loading https://ru.dotabuff.com/matches/8609319106/lanes
+2026-03-02 09:31:56,138 | INFO | Match 8609319106: update Excel
+2026-03-02 09:32:23,215 | INFO | [1/1] Match 8609319106 DONE in 119.5s
+2026-03-02 09:32:25,866 | INFO | Готово.
+2026-03-02 09:33:04,336 | INFO | Deduplicate Excel: removed 0 rows
+2026-03-02 09:33:21,406 | INFO | Existing Excel status: 1254/3554 complete
+2026-03-02 09:33:21,410 | INFO | Обрабатываем первые 1 матчей
+2026-03-02 09:33:21,410 | INFO | Матчей к обработке: 1
+2026-03-02 09:33:21,411 | INFO | [1/1] Match 8609319106 INCOMPLETE -> reparse
+2026-03-02 09:33:21,411 | INFO | [1/1] Match 8609319106 START
+2026-03-02 09:33:21,411 | INFO | Match 8609319106: fetch lanes
+2026-03-02 09:33:41,645 | WARNING | Fetch retry 1/2 for https://ru.dotabuff.com/matches/8609319106/lanes: Timeout while loading https://ru.dotabuff.com/matches/8609319106/lanes
+2026-03-02 09:34:23,831 | ERROR | ?????? ???????? lanes 8609319106: Timeout while loading https://ru.dotabuff.com/matches/8609319106/lanes
+2026-03-02 09:34:57,545 | WARNING | Match 8609319106: lanes fetch failed, fallback from OpenDota players (10 rows)
+2026-03-02 09:34:57,545 | INFO | Match 8609319106: update Excel
+2026-03-02 09:35:25,395 | INFO | [1/1] Match 8609319106 DONE in 124.0s
+2026-03-02 09:35:29,229 | INFO | Готово.

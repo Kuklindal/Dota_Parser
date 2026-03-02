@@ -230,9 +230,9 @@ def get_abilities_map():
         _abilities_cache = {}
         return _abilities_cache
 
-LANE_MAP = {0: "?", 1: "Легкая", 2: "Средняя", 3: "Сложная"}
+LANE_MAP = {0: "", 1: "Легкая", 2: "Средняя", 3: "Сложная"}
 # lane_role OpenDota: 1 carry, 2 mid, 3 off, 4 soft, 5 hard
-ROLE_MAP = {0: "?", 1: "Ключевая роль", 2: "Ключевая роль", 3: "Ключевая роль", 4: "Поддержка", 5: "Поддержка"}
+ROLE_MAP = {0: "", 1: "Ключевая роль", 2: "Ключевая роль", 3: "Ключевая роль", 4: "Поддержка", 5: "Поддержка"}
 
 def fetch_opendota_match(match_id: str):
     try:
@@ -356,9 +356,9 @@ def enrich_players_with_opendota(match_id: str, players: list, heroes_map: dict)
             continue
 
         if not (row.get("lane") or "").strip() or row.get("lane") in ("?", "Safe", "Mid", "Off") or any(x in (row.get("lane") or "").lower() for x in ("роум", "roam", "jungle", "лес")):
-            row["lane"] = LANE_MAP.get(p.get("lane", 0), "?")
+            row["lane"] = LANE_MAP.get(p.get("lane", 0), "")
         if not (row.get("lane_role") or "").strip() or row.get("lane_role") in ("?", "1 (Carry)", "2 (Mid)", "3 (Offlane)", "4 (Soft Support)", "5 (Hard Support)"):
-            row["lane_role"] = ROLE_MAP.get(p.get("lane_role", 0), "?")
+            row["lane_role"] = ROLE_MAP.get(p.get("lane_role", 0), "")
 
         abil_arr = p.get("ability_upgrades_arr") or []
         talent_id = abil_arr[9] if len(abil_arr) > 9 else ""
@@ -472,6 +472,10 @@ def _header_to_key(header_text):
         return "D"
     if "assist" in h_lower or "помощ" in h_lower:
         return "A"
+    if h_lower in ("з/м", "g/m", "gpm") or "gold / min" in h_lower:
+        return "GPM"
+    if h_lower in ("о/м", "x/m", "xpm") or "exp / min" in h_lower:
+        return "XPM"
     if "gpm" in h_lower or "золото" in h_lower or h in ("ОЦ", "NET"):
         return "GPM"
     if "xpm" in h_lower or "опыт" in h_lower:
@@ -959,6 +963,107 @@ def parse_lanes_tab(html, match_id):
     return rows
 
 
+def _lane_simple_from_text(lane_text: str) -> str:
+    s = (lane_text or "").strip().lower()
+    if not s or s == "?":
+        return ""
+    if ("легк" in s) or ("safe" in s):
+        return "Легкая"
+    if ("сред" in s) or ("мид" in s) or ("mid" in s):
+        return "Средняя"
+    if ("слож" in s) or ("off" in s):
+        return "Сложная"
+    if ("роум" in s) or ("roam" in s):
+        return "Роуминг"
+    return ""
+
+
+def _lane_side_from_team(team: str, lane_simple: str) -> str:
+    lane_simple = (lane_simple or "").strip()
+    if lane_simple == "Средняя":
+        return "Центр"
+    if lane_simple == "Роуминг":
+        return "Роум"
+    if lane_simple not in ("Легкая", "Сложная"):
+        return ""
+    if team == "Radiant":
+        return "Нижняя" if lane_simple == "Легкая" else "Верхняя"
+    if team == "Dire":
+        return "Верхняя" if lane_simple == "Легкая" else "Нижняя"
+    return ""
+
+
+def build_lanes_rows_fallback_from_overview(overview: dict, match_id: str):
+    if not overview:
+        return []
+    out = []
+    for p in (overview.get("players") or []):
+        hero = (p.get("hero") or "").strip()
+        if not hero:
+            continue
+        team = (p.get("team") or "").strip()
+        lane_text = (p.get("lane") or "").strip()
+        lane_simple = _lane_simple_from_text(lane_text)
+        out.append({
+            "match_id": match_id,
+            "hero": hero,
+            "lane_outcome": "",
+            "lane_team": "Силы Света" if team == "Radiant" else "Силы Тьмы" if team == "Dire" else "",
+            "lane_detail": lane_text,
+            "lane_simple": lane_simple,
+            "lane_side": _lane_side_from_team(team, lane_simple),
+            "lane": lane_text or lane_simple,
+            "gpm_12": "",
+            "xpm_12": "",
+            "k_12": "",
+            "d_12": "",
+            "a_12": "",
+            "lh_4": "",
+            "lh_8": "",
+            "lh_12": "",
+        })
+    return out
+
+
+def build_lanes_rows_fallback_from_opendota(match_id: str):
+    match_data = fetch_opendota_match(match_id)
+    players = (match_data or {}).get("players") or []
+    if not players:
+        return []
+    heroes_map = get_heroes_map()
+    out = []
+    for p in players:
+        slot = p.get("player_slot", 0)
+        team = "Radiant" if slot < 128 else "Dire"
+        hero = heroes_map.get(p.get("hero_id"), str(p.get("hero_id") or "")).strip()
+        if not hero:
+            continue
+        lane_simple = LANE_MAP.get(p.get("lane", 0), "")
+        if p.get("is_roaming"):
+            lane_simple = "Роуминг"
+        out.append({
+            "match_id": match_id,
+            "hero": hero,
+            "lane_outcome": "",
+            "lane_team": "Силы Света" if team == "Radiant" else "Силы Тьмы",
+            "lane_detail": lane_simple,
+            "lane_simple": lane_simple,
+            "lane_side": _lane_side_from_team(team, lane_simple),
+            "lane": lane_simple,
+            "gpm_12": "",
+            "xpm_12": "",
+            "k_12": "",
+            "d_12": "",
+            "a_12": "",
+            "lh_4": "",
+            "lh_8": "",
+            "lh_12": "",
+        })
+    # deterministic order: Radiant then Dire
+    out.sort(key=lambda r: (0 if r.get("lane_team") == "Силы Света" else 1, r.get("hero") or ""))
+    return out
+
+
 def load_match_ids(csv_path):
     path = Path(csv_path)
     if not path.exists():
@@ -1329,7 +1434,7 @@ def analyze_existing_excel(path, logger=None):
         players_counts, players_missing = _scan_sheet_counts(
             ws,
             headers,
-            ["team", "hero", "lane", "lane_role", "position"]
+            ["team", "hero", "position"]
         )
 
     lanes_counts = {}
@@ -1341,7 +1446,7 @@ def analyze_existing_excel(path, logger=None):
         lanes_counts, lanes_missing = _scan_sheet_counts(
             ws,
             headers,
-            ["hero", "lane_outcome", "lane_detail", "lane_simple", "lane_side"]
+            ["hero"]
         )
 
     status = {}
@@ -1728,12 +1833,29 @@ def main():
                 logger.info(f"Match {mid}: parse lanes")
                 _check_match_timeout("parse_lanes")
                 lanes_rows = parse_lanes_tab(html_lanes, mid)
+                if not lanes_rows:
+                    if overview is not None:
+                        lanes_rows = build_lanes_rows_fallback_from_overview(overview, mid)
+                        if lanes_rows:
+                            logger.warning(f"Match {mid}: lanes empty, fallback from overview players ({len(lanes_rows)} rows)")
+                    if not lanes_rows:
+                        lanes_rows = build_lanes_rows_fallback_from_opendota(mid)
+                        if lanes_rows:
+                            logger.warning(f"Match {mid}: lanes empty, fallback from OpenDota players ({len(lanes_rows)} rows)")
                 matches_lanes.append(lanes_rows)
 
             except Exception as e:
                 logger.error(f"?????? ???????? lanes {mid}: {e}")
                 lanes_rows = []
-                matches_lanes.append([])
+                if overview is not None:
+                    lanes_rows = build_lanes_rows_fallback_from_overview(overview, mid)
+                    if lanes_rows:
+                        logger.warning(f"Match {mid}: lanes fetch failed, fallback from overview players ({len(lanes_rows)} rows)")
+                if not lanes_rows:
+                    lanes_rows = build_lanes_rows_fallback_from_opendota(mid)
+                    if lanes_rows:
+                        logger.warning(f"Match {mid}: lanes fetch failed, fallback from OpenDota players ({len(lanes_rows)} rows)")
+                matches_lanes.append(lanes_rows)
 
         if save_each:
             try:
