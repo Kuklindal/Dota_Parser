@@ -26687,3 +26687,42 @@
 2026-03-02 09:34:57,545 | INFO | Match 8609319106: update Excel
 2026-03-02 09:35:25,395 | INFO | [1/1] Match 8609319106 DONE in 124.0s
 2026-03-02 09:35:29,229 | INFO | Готово.
+2026-03-02 09:46:52,406 | INFO | Deduplicate Excel: removed 0 rows
+2026-03-02 09:47:09,401 | INFO | Existing Excel status: 1255/3554 complete
+2026-03-02 09:47:09,436 | INFO | Матчей к обработке: 3609
+2026-03-02 09:47:09,437 | INFO | [1/3609] Match 8609332493 SKIP (already complete)
+2026-03-02 09:47:09,437 | INFO | [2/3609] Match 8609356930 INCOMPLETE -> reparse
+2026-03-02 09:47:09,437 | INFO | [2/3609] Match 8609356930 START
+2026-03-02 09:47:09,437 | INFO | Match 8609356930: fetch lanes
+2026-03-02 09:53:25,925 | INFO | Deduplicate Excel: removed 0 rows
+2026-03-02 09:53:45,654 | INFO | Existing Excel status: 1255/3554 complete
+2026-03-02 09:53:45,677 | INFO | Обрабатываем первые 1 матчей
+2026-03-02 09:53:45,677 | INFO | Матчей к обработке: 1
+2026-03-02 09:53:45,678 | INFO | [1/1] Match 8609356930 INCOMPLETE -> reparse
+2026-03-02 09:53:45,678 | INFO | [1/1] Match 8609356930 START
+2026-03-02 09:53:45,678 | INFO | Match 8609356930: fetch lanes
+2026-03-02 09:53:51,673 | INFO | Skip fetch retries for https://ru.dotabuff.com/matches/8609356930/lanes: Dotabuff page not found: https://ru.dotabuff.com/matches/8609356930/lanes
+2026-03-02 09:53:51,673 | INFO | Match 8609356930: parse lanes
+2026-03-02 09:53:53,827 | WARNING | Match 8609356930: lanes empty, fallback from OpenDota players (10 rows)
+2026-03-02 09:53:53,827 | INFO | Match 8609356930: update Excel
+2026-03-02 09:54:22,774 | INFO | [1/1] Match 8609356930 DONE in 37.1s
+2026-03-02 09:54:26,609 | INFO | Готово.
+2026-03-02 09:55:17,132 | INFO | Deduplicate Excel: removed 0 rows
+2026-03-02 09:55:33,645 | INFO | Existing Excel status: 1256/3554 complete
+2026-03-02 09:55:33,680 | INFO | Матчей к обработке: 3609
+2026-03-02 09:55:33,681 | INFO | [1/3609] Match 8609332493 SKIP (already complete)
+2026-03-02 09:55:33,681 | INFO | [2/3609] Match 8609356930 SKIP (already complete)
+2026-03-02 09:55:33,682 | INFO | [3/3609] Match 8609337846 INCOMPLETE -> reparse
+2026-03-02 09:55:33,682 | INFO | [3/3609] Match 8609337846 START
+2026-03-02 09:55:33,682 | INFO | Match 8609337846: fetch lanes
+2026-03-02 09:55:43,731 | INFO | Skip fetch retries for https://ru.dotabuff.com/matches/8609337846/lanes: Dotabuff page not found: https://ru.dotabuff.com/matches/8609337846/lanes
+2026-03-02 09:55:43,731 | INFO | Match 8609337846: parse lanes
+2026-03-02 09:55:46,207 | WARNING | Match 8609337846: lanes empty, fallback from OpenDota players (10 rows)
+2026-03-02 09:55:46,207 | INFO | Match 8609337846: update Excel
+2026-03-02 09:56:14,027 | INFO | [3/3609] Match 8609337846 DONE in 40.3s
+2026-03-02 09:56:17,682 | INFO | [4/3609] Match 8609342520 SKIP (already complete)
+2026-03-02 09:56:17,682 | INFO | [5/3609] Match 8609347733 SKIP (already complete)
+2026-03-02 09:56:17,682 | INFO | [6/3609] Match 8609333981 SKIP (already complete)
+2026-03-02 09:56:17,682 | INFO | [7/3609] Match 8609309113 INCOMPLETE -> reparse
+2026-03-02 09:56:17,682 | INFO | [7/3609] Match 8609309113 START
+2026-03-02 09:56:17,682 | INFO | Match 8609309113: fetch lanes

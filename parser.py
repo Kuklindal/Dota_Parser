@@ -29,6 +29,10 @@ USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTM
 _playwright_storage_state = None
 
 
+class DotabuffNotFoundError(RuntimeError):
+    pass
+
+
 def fetch_dotabuff_with_playwright(url, timeout=60000, save_debug_path=None, headed=False, max_total_ms=120000, logger=None):
     """
     Надёжная загрузка страниц Dotabuff через Playwright.
@@ -73,6 +77,19 @@ def fetch_dotabuff_with_playwright(url, timeout=60000, save_debug_path=None, hea
             if u not in uniq:
                 uniq.append(u)
         return uniq
+
+    def _is_dotabuff_not_found_page(page_obj):
+        try:
+            title_l = (page_obj.title() or "").lower()
+        except Exception:
+            title_l = ""
+        if ("not found" in title_l) and ("dotabuff" in title_l):
+            return True
+        try:
+            body_l = (page_obj.inner_text("body") or "").lower()
+        except Exception:
+            body_l = ""
+        return ("not found" in body_l) and ("we couldn't find what you are looking for" in body_l)
 
     with sync_playwright() as p:
         try:
@@ -127,10 +144,14 @@ def fetch_dotabuff_with_playwright(url, timeout=60000, save_debug_path=None, hea
                         title_l = (page.title() or "").lower()
                         if "just a moment" in title_l:
                             raise RuntimeError("Cloudflare challenge page")
+                        if _is_dotabuff_not_found_page(page):
+                            raise DotabuffNotFoundError(f"Dotabuff page not found: {candidate}")
                         loaded_url = candidate
                         break
                     except Exception as e:
                         last_err = e
+                        if isinstance(e, DotabuffNotFoundError):
+                            raise
                         page.wait_for_timeout(_clamp_timeout(700 * attempt))
                 if loaded_url:
                     break
@@ -140,6 +161,8 @@ def fetch_dotabuff_with_playwright(url, timeout=60000, save_debug_path=None, hea
 
             # Дать странице прогрузить основные блоки
             page.wait_for_timeout(_clamp_timeout(3000))
+            if _is_dotabuff_not_found_page(page):
+                raise DotabuffNotFoundError(f"Dotabuff page not found: {loaded_url or url}")
 
             # Ждём наиболее стабильные маркеры контента матча
             for selector in [
@@ -1771,6 +1794,9 @@ def main():
                     max_total_ms=int(args.page_timeout_ms * attempt),
                     logger=logger
                 )
+            except DotabuffNotFoundError as e:
+                logger.info(f"Skip fetch retries for {url}: {e}")
+                return ""
             except Exception as e:
                 last_err = e
                 if attempt >= attempts:
