@@ -37594,3 +37594,381 @@
 2026-03-03 09:11:59,335 | INFO | Match 8609751965: fetch overview
 2026-03-03 09:12:11,942 | INFO | Match 8609751965: parse overview
 2026-03-03 09:12:16,109 | INFO | Match 8609751965: update Excel
+2026-03-03 02:15:45,486 | INFO | Deduplicate Excel: removed 0 rows
+2026-03-03 02:16:06,007 | INFO | Existing Excel status: 2146/3554 complete
+2026-03-03 02:16:06,039 | INFO | Стартуем с матча №1396 (ID 8609751965)
+2026-03-03 02:16:06,039 | INFO | Матчей к обработке: 2214
+2026-03-03 02:16:06,041 | INFO | [1/2214] Match 8609751965 INCOMPLETE -> reparse
+2026-03-03 02:16:06,041 | INFO | [1/2214] Match 8609751965 START
+2026-03-03 02:16:06,042 | INFO | Match 8609751965: fetch overview
+2026-03-03 02:16:16,538 | INFO | Match 8609751965: parse overview
+2026-03-03 02:16:22,015 | INFO | Match 8609751965: update Excel
+2026-03-03 02:16:46,179 | INFO | Match 8609751965: removed 1 summary rows before append
+2026-03-03 02:16:59,225 | INFO | [1/2214] Match 8609751965 DONE in 53.2s
+2026-03-03 02:17:02,376 | INFO | [2/2214] Match 8609784456 SKIP (already complete)
+2026-03-03 02:17:02,376 | INFO | [3/2214] Match 8609775068 INCOMPLETE -> reparse
+2026-03-03 02:17:02,376 | INFO | [3/2214] Match 8609775068 START
+2026-03-03 02:17:02,377 | INFO | Match 8609775068: fetch overview
+2026-03-03 02:17:57,532 | INFO | Deduplicate Excel: removed 0 rows
+2026-03-03 02:18:19,370 | INFO | Existing Excel status: 2147/3554 complete
+2026-03-03 02:18:19,388 | INFO | Стартуем с матча №1396 (ID 8609751965)
+2026-03-03 02:18:19,388 | INFO | Матчей к обработке: 2214
+2026-03-03 02:18:19,389 | INFO | [1/2214] Match 8609751965 SKIP (already complete)
+2026-03-03 02:18:19,389 | INFO | [2/2214] Match 8609784456 SKIP (already complete)
+2026-03-03 02:18:19,389 | INFO | [3/2214] Match 8609775068 INCOMPLETE -> reparse
+2026-03-03 02:18:19,389 | INFO | [3/2214] Match 8609775068 START
+2026-03-03 02:18:19,389 | INFO | Match 8609775068: fetch overview
+2026-03-03 02:18:30,111 | INFO | Match 8609775068: parse overview
+2026-03-03 02:18:35,183 | INFO | Match 8609775068: update Excel
+2026-03-03 02:18:58,827 | INFO | Match 8609775068: removed 1 summary rows before append
+2026-03-03 02:19:11,838 | INFO | [3/2214] Match 8609775068 DONE in 52.4s
+2026-03-03 02:19:14,005 | INFO | [4/2214] Match 8609786851 INCOMPLETE -> reparse
+2026-03-03 02:19:14,005 | INFO | [4/2214] Match 8609786851 START
+2026-03-03 02:19:14,005 | INFO | Match 8609786851: fetch overview
+2026-03-03 02:21:14,127 | WARNING | Fetch retry 1/3 for https://ru.dotabuff.com/matches/8609786851: Timeout while loading https://ru.dotabuff.com/matches/8609786851
+2026-03-03 02:23:39,116 | INFO | Match 8609786851: parse overview
+2026-03-03 02:23:43,568 | INFO | Match 8609786851: update Excel
+2026-03-03 02:24:07,926 | INFO | Match 8609786851: removed 1 summary rows before append
+2026-03-03 02:24:22,629 | INFO | [4/2214] Match 8609786851 DONE in 308.6s
+2026-03-03 02:24:25,528 | INFO | [5/2214] Match 8609770673 SKIP (already complete)
+2026-03-03 02:24:25,528 | INFO | [6/2214] Match 8609779664 SKIP (already complete)
+2026-03-03 02:24:25,528 | INFO | [7/2214] Match 8609795463 SKIP (already complete)
+2026-03-03 02:24:25,528 | INFO | [8/2214] Match 8609788486 INCOMPLETE -> reparse
+2026-03-03 02:24:25,528 | INFO | [8/2214] Match 8609788486 START
+2026-03-03 02:24:25,529 | INFO | Match 8609788486: fetch overview
+2026-03-03 02:26:25,637 | WARNING | Fetch retry 1/3 for https://ru.dotabuff.com/matches/8609788486: Timeout while loading https://ru.dotabuff.com/matches/8609788486
+2026-03-03 02:28:51,273 | INFO | Match 8609788486: parse overview
+2026-03-03 02:28:54,589 | INFO | Match 8609788486: update Excel
+2026-03-03 02:29:17,487 | INFO | Match 8609788486: removed 1 summary rows before append
+2026-03-03 02:29:29,487 | INFO | [8/2214] Match 8609788486 DONE in 304.0s
+2026-03-03 02:29:31,810 | INFO | [9/2214] Match 8609787617 SKIP (already complete)
+2026-03-03 02:29:31,810 | INFO | [10/2214] Match 8609774638 SKIP (already complete)
+2026-03-03 02:29:31,810 | INFO | [11/2214] Match 8609770964 SKIP (already complete)
+2026-03-03 02:29:31,810 | INFO | [12/2214] Match 8609775041 SKIP (already complete)
+2026-03-03 02:29:31,811 | INFO | [13/2214] Match 8609775578 SKIP (already complete)
+2026-03-03 02:29:31,811 | INFO | [14/2214] Match 8609774550 INCOMPLETE -> reparse
+2026-03-03 02:29:31,811 | INFO | [14/2214] Match 8609774550 START
+2026-03-03 02:29:31,811 | INFO | Match 8609774550: fetch overview
+2026-03-03 02:31:31,914 | WARNING | Fetch retry 1/3 for https://ru.dotabuff.com/matches/8609774550: Timeout while loading https://ru.dotabuff.com/matches/8609774550
+2026-03-03 02:33:56,768 | INFO | Match 8609774550: parse overview
+2026-03-03 02:34:01,056 | INFO | Match 8609774550: update Excel
+2026-03-03 02:34:23,665 | INFO | Match 8609774550: removed 1 summary rows before append
+2026-03-03 02:34:38,242 | INFO | [14/2214] Match 8609774550 DONE in 306.4s
+2026-03-03 02:34:41,029 | INFO | [15/2214] Match 8609792191 SKIP (already complete)
+2026-03-03 02:34:41,029 | INFO | [16/2214] Match 8609791659 SKIP (already complete)
+2026-03-03 02:34:41,029 | INFO | [17/2214] Match 8609768919 SKIP (already complete)
+2026-03-03 02:34:41,029 | INFO | [18/2214] Match 8609784932 SKIP (already complete)
+2026-03-03 02:34:41,029 | INFO | [19/2214] Match 8609785199 SKIP (already complete)
+2026-03-03 02:34:41,030 | INFO | [20/2214] Match 8609778384 SKIP (already complete)
+2026-03-03 02:34:41,030 | INFO | [21/2214] Match 8609786754 INCOMPLETE -> reparse
+2026-03-03 02:34:41,030 | INFO | [21/2214] Match 8609786754 START
+2026-03-03 02:34:41,030 | INFO | Match 8609786754: fetch overview
+2026-03-03 02:36:41,142 | WARNING | Fetch retry 1/3 for https://ru.dotabuff.com/matches/8609786754: Timeout while loading https://ru.dotabuff.com/matches/8609786754
+2026-03-03 02:39:06,821 | INFO | Match 8609786754: parse overview
+2026-03-03 02:39:11,340 | INFO | Match 8609786754: update Excel
+2026-03-03 02:39:33,793 | INFO | Match 8609786754: removed 1 summary rows before append
+2026-03-03 02:39:46,168 | INFO | [21/2214] Match 8609786754 DONE in 305.1s
+2026-03-03 02:39:48,531 | INFO | [22/2214] Match 8609768299 SKIP (already complete)
+2026-03-03 02:39:48,532 | INFO | [23/2214] Match 8609792379 SKIP (already complete)
+2026-03-03 02:39:48,532 | INFO | [24/2214] Match 8609784710 SKIP (already complete)
+2026-03-03 02:39:48,532 | INFO | [25/2214] Match 8609787030 SKIP (already complete)
+2026-03-03 02:39:48,532 | INFO | [26/2214] Match 8609777701 SKIP (already complete)
+2026-03-03 02:39:48,532 | INFO | [27/2214] Match 8609791135 SKIP (already complete)
+2026-03-03 02:39:48,532 | INFO | [28/2214] Match 8609789130 SKIP (already complete)
+2026-03-03 02:39:48,533 | INFO | [29/2214] Match 8609791592 SKIP (already complete)
+2026-03-03 02:39:48,533 | INFO | [30/2214] Match 8609762943 INCOMPLETE -> reparse
+2026-03-03 02:39:48,533 | INFO | [30/2214] Match 8609762943 START
+2026-03-03 02:39:48,533 | INFO | Match 8609762943: fetch overview
+2026-03-03 02:41:48,636 | WARNING | Fetch retry 1/3 for https://ru.dotabuff.com/matches/8609762943: Timeout while loading https://ru.dotabuff.com/matches/8609762943
+2026-03-03 02:44:13,028 | INFO | Match 8609762943: parse overview
+2026-03-03 02:44:16,034 | INFO | Match 8609762943: update Excel
+2026-03-03 02:44:38,280 | INFO | Match 8609762943: removed 1 summary rows before append
+2026-03-03 02:44:50,700 | INFO | [30/2214] Match 8609762943 DONE in 302.2s
+2026-03-03 02:44:54,658 | INFO | [31/2214] Match 8609792303 SKIP (already complete)
+2026-03-03 02:44:54,659 | INFO | [32/2214] Match 8609798422 SKIP (already complete)
+2026-03-03 02:44:54,659 | INFO | [33/2214] Match 8609762161 SKIP (already complete)
+2026-03-03 02:44:54,659 | INFO | [34/2214] Match 8609779264 SKIP (already complete)
+2026-03-03 02:44:54,659 | INFO | [35/2214] Match 8609791157 SKIP (already complete)
+2026-03-03 02:44:54,660 | INFO | [36/2214] Match 8609792284 INCOMPLETE -> reparse
+2026-03-03 02:44:54,660 | INFO | [36/2214] Match 8609792284 START
+2026-03-03 02:44:54,660 | INFO | Match 8609792284: fetch overview
+2026-03-03 02:46:54,758 | WARNING | Fetch retry 1/3 for https://ru.dotabuff.com/matches/8609792284: Timeout while loading https://ru.dotabuff.com/matches/8609792284
+2026-03-03 02:49:21,325 | INFO | Match 8609792284: parse overview
+2026-03-03 02:49:26,141 | INFO | Match 8609792284: update Excel
+2026-03-03 02:49:49,650 | INFO | Match 8609792284: removed 1 summary rows before append
+2026-03-03 02:50:05,755 | INFO | [36/2214] Match 8609792284 DONE in 311.1s
+2026-03-03 02:50:08,688 | INFO | [37/2214] Match 8609802077 INCOMPLETE -> reparse
+2026-03-03 02:50:08,688 | INFO | [37/2214] Match 8609802077 START
+2026-03-03 02:50:08,688 | INFO | Match 8609802077: fetch overview
+2026-03-03 02:50:19,553 | INFO | Match 8609802077: parse overview
+2026-03-03 02:50:23,587 | INFO | Match 8609802077: update Excel
+2026-03-03 02:50:45,133 | INFO | Match 8609802077: removed 1 summary rows before append
+2026-03-03 02:50:56,978 | INFO | [37/2214] Match 8609802077 DONE in 48.3s
+2026-03-03 02:50:59,028 | INFO | [38/2214] Match 8609791780 INCOMPLETE -> reparse
+2026-03-03 02:50:59,028 | INFO | [38/2214] Match 8609791780 START
+2026-03-03 02:50:59,028 | INFO | Match 8609791780: fetch overview
+2026-03-03 02:52:59,138 | WARNING | Fetch retry 1/3 for https://ru.dotabuff.com/matches/8609791780: Timeout while loading https://ru.dotabuff.com/matches/8609791780
+2026-03-03 02:55:24,810 | INFO | Match 8609791780: parse overview
+2026-03-03 02:55:28,436 | INFO | Match 8609791780: update Excel
+2026-03-03 02:55:50,209 | INFO | Match 8609791780: removed 1 summary rows before append
+2026-03-03 02:56:01,984 | INFO | [38/2214] Match 8609791780 DONE in 303.0s
+2026-03-03 02:56:04,611 | INFO | [39/2214] Match 8609792504 INCOMPLETE -> reparse
+2026-03-03 02:56:04,611 | INFO | [39/2214] Match 8609792504 START
+2026-03-03 02:56:04,611 | INFO | Match 8609792504: fetch overview
+2026-03-03 02:58:04,721 | WARNING | Fetch retry 1/3 for https://ru.dotabuff.com/matches/8609792504: Timeout while loading https://ru.dotabuff.com/matches/8609792504
+2026-03-03 03:00:29,969 | INFO | Match 8609792504: parse overview
+2026-03-03 03:00:33,414 | INFO | Match 8609792504: update Excel
+2026-03-03 03:00:55,911 | INFO | Match 8609792504: removed 1 summary rows before append
+2026-03-03 03:01:08,404 | INFO | [39/2214] Match 8609792504 DONE in 303.8s
+2026-03-03 03:01:10,896 | INFO | [40/2214] Match 8609785339 SKIP (already complete)
+2026-03-03 03:01:10,896 | INFO | [41/2214] Match 8609755766 INCOMPLETE -> reparse
+2026-03-03 03:01:10,896 | INFO | [41/2214] Match 8609755766 START
+2026-03-03 03:01:10,896 | INFO | Match 8609755766: fetch overview
+2026-03-03 03:03:11,007 | WARNING | Fetch retry 1/3 for https://ru.dotabuff.com/matches/8609755766: Timeout while loading https://ru.dotabuff.com/matches/8609755766
+2026-03-03 03:05:36,800 | INFO | Match 8609755766: parse overview
+2026-03-03 03:05:41,991 | INFO | Match 8609755766: update Excel
+2026-03-03 03:06:04,956 | INFO | Match 8609755766: removed 1 summary rows before append
+2026-03-03 03:06:17,742 | INFO | [41/2214] Match 8609755766 DONE in 306.8s
+2026-03-03 03:06:20,809 | INFO | [42/2214] Match 8609789385 INCOMPLETE -> reparse
+2026-03-03 03:06:20,809 | INFO | [42/2214] Match 8609789385 START
+2026-03-03 03:06:20,809 | INFO | Match 8609789385: fetch overview
+2026-03-03 03:06:30,211 | INFO | Match 8609789385: parse overview
+2026-03-03 03:06:33,294 | INFO | Match 8609789385: update Excel
+2026-03-03 03:06:54,491 | INFO | Match 8609789385: removed 1 summary rows before append
+2026-03-03 03:07:06,820 | INFO | [42/2214] Match 8609789385 DONE in 46.0s
+2026-03-03 03:07:09,390 | INFO | [43/2214] Match 8609795890 SKIP (already complete)
+2026-03-03 03:07:09,390 | INFO | [44/2214] Match 8609786750 INCOMPLETE -> reparse
+2026-03-03 03:07:09,390 | INFO | [44/2214] Match 8609786750 START
+2026-03-03 03:07:09,390 | INFO | Match 8609786750: fetch overview
+2026-03-03 03:09:09,502 | WARNING | Fetch retry 1/3 for https://ru.dotabuff.com/matches/8609786750: Timeout while loading https://ru.dotabuff.com/matches/8609786750
+2026-03-03 03:11:35,005 | INFO | Match 8609786750: parse overview
+2026-03-03 03:11:39,601 | INFO | Match 8609786750: update Excel
+2026-03-03 03:12:02,529 | INFO | Match 8609786750: removed 1 summary rows before append
+2026-03-03 03:12:14,923 | INFO | [44/2214] Match 8609786750 DONE in 305.5s
+2026-03-03 03:12:17,993 | INFO | [45/2214] Match 8609790268 INCOMPLETE -> reparse
+2026-03-03 03:12:17,993 | INFO | [45/2214] Match 8609790268 START
+2026-03-03 03:12:17,993 | INFO | Match 8609790268: fetch overview
+2026-03-03 03:14:18,078 | WARNING | Fetch retry 1/3 for https://ru.dotabuff.com/matches/8609790268: Timeout while loading https://ru.dotabuff.com/matches/8609790268
+2026-03-03 03:16:43,633 | INFO | Match 8609790268: parse overview
+2026-03-03 03:16:47,006 | INFO | Match 8609790268: update Excel
+2026-03-03 03:17:09,365 | INFO | Match 8609790268: removed 1 summary rows before append
+2026-03-03 03:17:21,463 | INFO | [45/2214] Match 8609790268 DONE in 303.5s
+2026-03-03 03:17:23,813 | INFO | [46/2214] Match 8609756065 SKIP (already complete)
+2026-03-03 03:17:23,813 | INFO | [47/2214] Match 8609799034 SKIP (already complete)
+2026-03-03 03:17:23,813 | INFO | [48/2214] Match 8609806731 INCOMPLETE -> reparse
+2026-03-03 03:17:23,813 | INFO | [48/2214] Match 8609806731 START
+2026-03-03 03:17:23,813 | INFO | Match 8609806731: fetch overview
+2026-03-03 03:19:23,923 | WARNING | Fetch retry 1/3 for https://ru.dotabuff.com/matches/8609806731: Timeout while loading https://ru.dotabuff.com/matches/8609806731
+2026-03-03 03:21:48,570 | INFO | Match 8609806731: parse overview
+2026-03-03 03:21:52,550 | INFO | Match 8609806731: update Excel
+2026-03-03 03:22:15,253 | INFO | Match 8609806731: removed 1 summary rows before append
+2026-03-03 03:22:27,070 | INFO | [48/2214] Match 8609806731 DONE in 303.3s
+2026-03-03 03:22:30,145 | INFO | [49/2214] Match 8609778751 INCOMPLETE -> reparse
+2026-03-03 03:22:30,145 | INFO | [49/2214] Match 8609778751 START
+2026-03-03 03:22:30,145 | INFO | Match 8609778751: fetch overview
+2026-03-03 03:22:40,688 | INFO | Match 8609778751: parse overview
+2026-03-03 03:22:44,727 | INFO | Match 8609778751: update Excel
+2026-03-03 03:23:07,310 | INFO | Match 8609778751: removed 1 summary rows before append
+2026-03-03 03:23:19,230 | INFO | [49/2214] Match 8609778751 DONE in 49.1s
+2026-03-03 03:23:22,583 | INFO | [50/2214] Match 8609765227 INCOMPLETE -> reparse
+2026-03-03 03:23:22,584 | INFO | [50/2214] Match 8609765227 START
+2026-03-03 03:23:22,584 | INFO | Match 8609765227: fetch overview
+2026-03-03 03:25:22,754 | WARNING | Fetch retry 1/3 for https://ru.dotabuff.com/matches/8609765227: Timeout while loading https://ru.dotabuff.com/matches/8609765227
+2026-03-03 03:27:47,226 | INFO | Match 8609765227: parse overview
+2026-03-03 03:27:50,576 | INFO | Match 8609765227: update Excel
+2026-03-03 03:28:13,949 | INFO | Match 8609765227: removed 1 summary rows before append
+2026-03-03 03:28:26,212 | INFO | [50/2214] Match 8609765227 DONE in 303.6s
+2026-03-03 03:28:29,771 | INFO | [51/2214] Match 8609799471 SKIP (already complete)
+2026-03-03 03:28:29,772 | INFO | [52/2214] Match 8609787778 SKIP (already complete)
+2026-03-03 03:28:29,772 | INFO | [53/2214] Match 8609797416 SKIP (already complete)
+2026-03-03 03:28:29,772 | INFO | [54/2214] Match 8609795239 SKIP (already complete)
+2026-03-03 03:28:29,772 | INFO | [55/2214] Match 8609792378 SKIP (already complete)
+2026-03-03 03:28:29,772 | INFO | [56/2214] Match 8609796230 SKIP (already complete)
+2026-03-03 03:28:29,772 | INFO | [57/2214] Match 8609786477 SKIP (already complete)
+2026-03-03 03:28:29,773 | INFO | [58/2214] Match 8609790880 INCOMPLETE -> reparse
+2026-03-03 03:28:29,773 | INFO | [58/2214] Match 8609790880 START
+2026-03-03 03:28:29,773 | INFO | Match 8609790880: fetch overview
+2026-03-03 03:30:29,872 | WARNING | Fetch retry 1/3 for https://ru.dotabuff.com/matches/8609790880: Timeout while loading https://ru.dotabuff.com/matches/8609790880
+2026-03-03 03:32:55,185 | INFO | Match 8609790880: parse overview
+2026-03-03 03:32:58,121 | INFO | Match 8609790880: update Excel
+2026-03-03 03:33:21,834 | INFO | Match 8609790880: removed 1 summary rows before append
+2026-03-03 03:33:36,825 | INFO | [58/2214] Match 8609790880 DONE in 307.1s
+2026-03-03 03:33:40,687 | INFO | [59/2214] Match 8609801233 INCOMPLETE -> reparse
+2026-03-03 03:33:40,687 | INFO | [59/2214] Match 8609801233 START
+2026-03-03 03:33:40,687 | INFO | Match 8609801233: fetch overview
+2026-03-03 03:35:40,778 | WARNING | Fetch retry 1/3 for https://ru.dotabuff.com/matches/8609801233: Timeout while loading https://ru.dotabuff.com/matches/8609801233
+2026-03-03 03:38:07,777 | INFO | Match 8609801233: parse overview
+2026-03-03 03:38:12,610 | INFO | Match 8609801233: update Excel
+2026-03-03 03:38:34,690 | INFO | Match 8609801233: removed 1 summary rows before append
+2026-03-03 03:38:47,690 | INFO | [59/2214] Match 8609801233 DONE in 307.0s
+2026-03-03 03:38:49,745 | INFO | [60/2214] Match 8609772669 SKIP (already complete)
+2026-03-03 03:38:49,746 | INFO | [61/2214] Match 8609797655 SKIP (already complete)
+2026-03-03 03:38:49,746 | INFO | [62/2214] Match 8609795265 SKIP (already complete)
+2026-03-03 03:38:49,746 | INFO | [63/2214] Match 8609778975 SKIP (already complete)
+2026-03-03 03:38:49,746 | INFO | [64/2214] Match 8609794770 SKIP (already complete)
+2026-03-03 03:38:49,746 | INFO | [65/2214] Match 8609793975 SKIP (already complete)
+2026-03-03 03:38:49,746 | INFO | [66/2214] Match 8609799674 SKIP (already complete)
+2026-03-03 03:38:49,747 | INFO | [67/2214] Match 8609802004 SKIP (already complete)
+2026-03-03 03:38:49,747 | INFO | [68/2214] Match 8609797075 SKIP (already complete)
+2026-03-03 03:38:49,747 | INFO | [69/2214] Match 8609778752 SKIP (already complete)
+2026-03-03 03:38:49,747 | INFO | [70/2214] Match 8609806111 SKIP (already complete)
+2026-03-03 03:38:49,747 | INFO | [71/2214] Match 8609789852 SKIP (already complete)
+2026-03-03 03:38:49,747 | INFO | [72/2214] Match 8609798704 SKIP (already complete)
+2026-03-03 03:38:49,747 | INFO | [73/2214] Match 8609792226 SKIP (already complete)
+2026-03-03 03:38:49,747 | INFO | [74/2214] Match 8609804585 SKIP (already complete)
+2026-03-03 03:38:49,748 | INFO | [75/2214] Match 8609785881 SKIP (already complete)
+2026-03-03 03:38:49,748 | INFO | [76/2214] Match 8609796515 SKIP (already complete)
+2026-03-03 03:38:49,748 | INFO | [77/2214] Match 8609803349 SKIP (already complete)
+2026-03-03 03:38:49,748 | INFO | [78/2214] Match 8609800157 SKIP (already complete)
+2026-03-03 03:38:49,748 | INFO | [79/2214] Match 8609803890 SKIP (already complete)
+2026-03-03 03:38:49,748 | INFO | [80/2214] Match 8609795315 INCOMPLETE -> reparse
+2026-03-03 03:38:49,748 | INFO | [80/2214] Match 8609795315 START
+2026-03-03 03:38:49,748 | INFO | Match 8609795315: fetch overview
+2026-03-03 03:39:01,245 | INFO | Match 8609795315: parse overview
+2026-03-03 03:39:06,648 | INFO | Match 8609795315: update Excel
+2026-03-03 03:39:28,571 | INFO | Match 8609795315: removed 1 summary rows before append
+2026-03-03 03:39:40,642 | INFO | [80/2214] Match 8609795315 DONE in 50.9s
+2026-03-03 03:39:42,777 | INFO | [81/2214] Match 8609798569 SKIP (already complete)
+2026-03-03 03:39:42,777 | INFO | [82/2214] Match 8609798968 INCOMPLETE -> reparse
+2026-03-03 03:39:42,777 | INFO | [82/2214] Match 8609798968 START
+2026-03-03 03:39:42,777 | INFO | Match 8609798968: fetch overview
+2026-03-03 03:41:42,900 | WARNING | Fetch retry 1/3 for https://ru.dotabuff.com/matches/8609798968: Timeout while loading https://ru.dotabuff.com/matches/8609798968
+2026-03-03 03:44:07,775 | INFO | Match 8609798968: parse overview
+2026-03-03 03:44:11,500 | INFO | Match 8609798968: update Excel
+2026-03-03 03:44:34,944 | INFO | Match 8609798968: removed 1 summary rows before append
+2026-03-03 03:44:46,759 | INFO | [82/2214] Match 8609798968 DONE in 304.0s
+2026-03-03 03:44:49,772 | INFO | [83/2214] Match 8609786171 INCOMPLETE -> reparse
+2026-03-03 03:44:49,773 | INFO | [83/2214] Match 8609786171 START
+2026-03-03 03:44:49,773 | INFO | Match 8609786171: fetch overview
+2026-03-03 03:46:49,888 | WARNING | Fetch retry 1/3 for https://ru.dotabuff.com/matches/8609786171: Timeout while loading https://ru.dotabuff.com/matches/8609786171
+2026-03-03 03:49:14,719 | INFO | Match 8609786171: parse overview
+2026-03-03 03:49:17,653 | INFO | Match 8609786171: update Excel
+2026-03-03 03:49:39,918 | INFO | Match 8609786171: removed 1 summary rows before append
+2026-03-03 03:49:52,045 | INFO | [83/2214] Match 8609786171 DONE in 302.3s
+2026-03-03 03:49:54,645 | INFO | [84/2214] Match 8609791519 SKIP (already complete)
+2026-03-03 03:49:54,646 | INFO | [85/2214] Match 8609802680 INCOMPLETE -> reparse
+2026-03-03 03:49:54,646 | INFO | [85/2214] Match 8609802680 START
+2026-03-03 03:49:54,646 | INFO | Match 8609802680: fetch overview
+2026-03-03 03:51:54,743 | WARNING | Fetch retry 1/3 for https://ru.dotabuff.com/matches/8609802680: Timeout while loading https://ru.dotabuff.com/matches/8609802680
+2026-03-03 03:54:22,402 | INFO | Match 8609802680: parse overview
+2026-03-03 03:54:25,564 | INFO | Match 8609802680: update Excel
+2026-03-03 03:54:47,991 | INFO | Match 8609802680: removed 1 summary rows before append
+2026-03-03 03:54:59,953 | INFO | [85/2214] Match 8609802680 DONE in 305.3s
+2026-03-03 03:55:03,571 | INFO | [86/2214] Match 8609788260 SKIP (already complete)
+2026-03-03 03:55:03,571 | INFO | [87/2214] Match 8609804086 SKIP (already complete)
+2026-03-03 03:55:03,571 | INFO | [88/2214] Match 8609797594 INCOMPLETE -> reparse
+2026-03-03 03:55:03,571 | INFO | [88/2214] Match 8609797594 START
+2026-03-03 03:55:03,571 | INFO | Match 8609797594: fetch overview
+2026-03-03 03:55:15,135 | INFO | Match 8609797594: parse overview
+2026-03-03 03:55:19,120 | INFO | Match 8609797594: update Excel
+2026-03-03 03:55:40,932 | INFO | Match 8609797594: removed 1 summary rows before append
+2026-03-03 03:55:53,863 | INFO | [88/2214] Match 8609797594 DONE in 50.3s
+2026-03-03 03:55:57,474 | INFO | [89/2214] Match 8609798122 SKIP (already complete)
+2026-03-03 03:55:57,474 | INFO | [90/2214] Match 8609787957 SKIP (already complete)
+2026-03-03 03:55:57,475 | INFO | [91/2214] Match 8609787359 SKIP (already complete)
+2026-03-03 03:55:57,475 | INFO | [92/2214] Match 8609797588 SKIP (already complete)
+2026-03-03 03:55:57,475 | INFO | [93/2214] Match 8609803286 SKIP (already complete)
+2026-03-03 03:55:57,475 | INFO | [94/2214] Match 8609784608 SKIP (already complete)
+2026-03-03 03:55:57,475 | INFO | [95/2214] Match 8609811176 INCOMPLETE -> reparse
+2026-03-03 03:55:57,475 | INFO | [95/2214] Match 8609811176 START
+2026-03-03 03:55:57,475 | INFO | Match 8609811176: fetch overview
+2026-03-03 03:57:57,569 | WARNING | Fetch retry 1/3 for https://ru.dotabuff.com/matches/8609811176: Timeout while loading https://ru.dotabuff.com/matches/8609811176
+2026-03-03 04:00:22,375 | INFO | Match 8609811176: parse overview
+2026-03-03 04:00:25,432 | INFO | Match 8609811176: update Excel
+2026-03-03 04:00:48,474 | INFO | Match 8609811176: removed 1 summary rows before append
+2026-03-03 04:01:00,501 | INFO | [95/2214] Match 8609811176 DONE in 303.0s
+2026-03-03 04:01:04,427 | INFO | [96/2214] Match 8609804973 SKIP (already complete)
+2026-03-03 04:01:04,427 | INFO | [97/2214] Match 8609810192 INCOMPLETE -> reparse
+2026-03-03 04:01:04,428 | INFO | [97/2214] Match 8609810192 START
+2026-03-03 04:01:04,428 | INFO | Match 8609810192: fetch overview
+2026-03-03 04:03:04,542 | WARNING | Fetch retry 1/3 for https://ru.dotabuff.com/matches/8609810192: Timeout while loading https://ru.dotabuff.com/matches/8609810192
+2026-03-03 04:05:30,311 | INFO | Match 8609810192: parse overview
+2026-03-03 04:05:34,946 | INFO | Match 8609810192: update Excel
+2026-03-03 04:05:58,700 | INFO | Match 8609810192: removed 1 summary rows before append
+2026-03-03 04:06:11,247 | INFO | [97/2214] Match 8609810192 DONE in 306.8s
+2026-03-03 04:06:13,623 | INFO | [98/2214] Match 8609772746 INCOMPLETE -> reparse
+2026-03-03 04:06:13,623 | INFO | [98/2214] Match 8609772746 START
+2026-03-03 04:06:13,623 | INFO | Match 8609772746: fetch overview
+2026-03-03 04:08:13,734 | WARNING | Fetch retry 1/3 for https://ru.dotabuff.com/matches/8609772746: Timeout while loading https://ru.dotabuff.com/matches/8609772746
+2026-03-03 04:10:39,688 | INFO | Match 8609772746: parse overview
+2026-03-03 04:10:43,136 | INFO | Match 8609772746: update Excel
+2026-03-03 04:11:06,943 | INFO | Match 8609772746: removed 1 summary rows before append
+2026-03-03 04:11:19,199 | INFO | [98/2214] Match 8609772746 DONE in 305.6s
+2026-03-03 04:11:22,385 | INFO | [99/2214] Match 8609804238 SKIP (already complete)
+2026-03-03 04:11:22,386 | INFO | [100/2214] Match 8609802200 SKIP (already complete)
+2026-03-03 04:11:22,386 | INFO | [101/2214] Match 8609794659 SKIP (already complete)
+2026-03-03 04:11:22,386 | INFO | [102/2214] Match 8609810524 SKIP (already complete)
+2026-03-03 04:11:22,386 | INFO | [103/2214] Match 8609807141 SKIP (already complete)
+2026-03-03 04:11:22,386 | INFO | [104/2214] Match 8609799391 SKIP (already complete)
+2026-03-03 04:11:22,387 | INFO | [105/2214] Match 8609808573 SKIP (already complete)
+2026-03-03 04:11:22,387 | INFO | [106/2214] Match 8609805363 INCOMPLETE -> reparse
+2026-03-03 04:11:22,387 | INFO | [106/2214] Match 8609805363 START
+2026-03-03 04:11:22,387 | INFO | Match 8609805363: fetch overview
+2026-03-03 04:11:32,647 | INFO | Match 8609805363: parse overview
+2026-03-03 04:11:36,442 | INFO | Match 8609805363: update Excel
+2026-03-03 04:12:00,399 | INFO | Match 8609805363: removed 1 summary rows before append
+2026-03-03 04:12:13,418 | INFO | [106/2214] Match 8609805363 DONE in 51.0s
+2026-03-03 04:12:16,924 | INFO | [107/2214] Match 8609805092 SKIP (already complete)
+2026-03-03 04:12:16,924 | INFO | [108/2214] Match 8609794283 SKIP (already complete)
+2026-03-03 04:12:16,925 | INFO | [109/2214] Match 8609804314 INCOMPLETE -> reparse
+2026-03-03 04:12:16,925 | INFO | [109/2214] Match 8609804314 START
+2026-03-03 04:12:16,925 | INFO | Match 8609804314: fetch overview
+2026-03-03 04:14:17,023 | WARNING | Fetch retry 1/3 for https://ru.dotabuff.com/matches/8609804314: Timeout while loading https://ru.dotabuff.com/matches/8609804314
+2026-03-03 04:16:42,465 | INFO | Match 8609804314: parse overview
+2026-03-03 04:16:45,648 | INFO | Match 8609804314: update Excel
+2026-03-03 04:17:08,536 | INFO | Match 8609804314: removed 1 summary rows before append
+2026-03-03 04:17:21,002 | INFO | [109/2214] Match 8609804314 DONE in 304.1s
+2026-03-03 04:17:23,178 | INFO | [110/2214] Match 8609814150 SKIP (already complete)
+2026-03-03 04:17:23,178 | INFO | [111/2214] Match 8609806582 SKIP (already complete)
+2026-03-03 04:17:23,179 | INFO | [112/2214] Match 8609815920 SKIP (already complete)
+2026-03-03 04:17:23,179 | INFO | [113/2214] Match 8609784891 SKIP (already complete)
+2026-03-03 04:17:23,179 | INFO | [114/2214] Match 8609803000 SKIP (already complete)
+2026-03-03 04:17:23,179 | INFO | [115/2214] Match 8609814227 SKIP (already complete)
+2026-03-03 04:17:23,179 | INFO | [116/2214] Match 8609808424 SKIP (already complete)
+2026-03-03 04:17:23,179 | INFO | [117/2214] Match 8609801257 SKIP (already complete)
+2026-03-03 04:17:23,180 | INFO | [118/2214] Match 8609813392 SKIP (already complete)
+2026-03-03 04:17:23,180 | INFO | [119/2214] Match 8609803010 SKIP (already complete)
+2026-03-03 04:17:23,180 | INFO | [120/2214] Match 8609804718 SKIP (already complete)
+2026-03-03 04:17:23,180 | INFO | [121/2214] Match 8609795089 SKIP (already complete)
+2026-03-03 04:17:23,180 | INFO | [122/2214] Match 8609822058 SKIP (already complete)
+2026-03-03 04:17:23,180 | INFO | [123/2214] Match 8609814397 SKIP (already complete)
+2026-03-03 04:17:23,180 | INFO | [124/2214] Match 8609811565 SKIP (already complete)
+2026-03-03 04:17:23,180 | INFO | [125/2214] Match 8609800332 SKIP (already complete)
+2026-03-03 04:17:23,181 | INFO | [126/2214] Match 8609787709 SKIP (already complete)
+2026-03-03 04:17:23,181 | INFO | [127/2214] Match 8609820027 SKIP (already complete)
+2026-03-03 04:17:23,181 | INFO | [128/2214] Match 8609801583 SKIP (already complete)
+2026-03-03 04:17:23,181 | INFO | [129/2214] Match 8609798949 INCOMPLETE -> reparse
+2026-03-03 04:17:23,181 | INFO | [129/2214] Match 8609798949 START
+2026-03-03 04:17:23,181 | INFO | Match 8609798949: fetch overview
+2026-03-03 04:19:23,300 | WARNING | Fetch retry 1/3 for https://ru.dotabuff.com/matches/8609798949: Timeout while loading https://ru.dotabuff.com/matches/8609798949
+2026-03-03 04:21:48,695 | INFO | Match 8609798949: parse overview
+2026-03-03 04:21:53,268 | INFO | Match 8609798949: update Excel
+2026-03-03 04:22:16,288 | INFO | Match 8609798949: removed 1 summary rows before append
+2026-03-03 04:22:28,297 | INFO | [129/2214] Match 8609798949 DONE in 305.1s
+2026-03-03 04:22:30,639 | INFO | [130/2214] Match 8609780370 SKIP (already complete)
+2026-03-03 04:22:30,639 | INFO | [131/2214] Match 8609800125 INCOMPLETE -> reparse
+2026-03-03 04:22:30,640 | INFO | [131/2214] Match 8609800125 START
+2026-03-03 04:22:30,640 | INFO | Match 8609800125: fetch overview
+2026-03-03 04:24:30,809 | WARNING | Fetch retry 1/3 for https://ru.dotabuff.com/matches/8609800125: Timeout while loading https://ru.dotabuff.com/matches/8609800125
+2026-03-03 04:25:28,374 | INFO | Deduplicate Excel: removed 0 rows
+2026-03-03 04:25:47,141 | INFO | Existing Excel status: 2160/3554 complete
+2026-03-03 04:25:47,168 | INFO | Стартуем с матча №1527 (ID 8609807580)
+2026-03-03 04:25:47,168 | INFO | Матчей к обработке: 2083
+2026-03-03 04:25:47,170 | INFO | [1/2083] Match 8609807580 INCOMPLETE -> reparse
+2026-03-03 04:25:47,170 | INFO | [1/2083] Match 8609807580 START
+2026-03-03 04:25:47,170 | INFO | Match 8609807580: fetch overview
+2026-03-03 04:25:57,415 | INFO | Match 8609807580: parse overview
+2026-03-03 04:26:02,344 | INFO | Match 8609807580: update Excel
+2026-03-03 04:26:23,732 | INFO | Match 8609807580: removed 1 summary rows before append
+2026-03-03 04:26:35,538 | INFO | [1/2083] Match 8609807580 DONE in 48.4s
+2026-03-03 04:26:37,644 | INFO | [2/2083] Match 8609806964 INCOMPLETE -> reparse
+2026-03-03 04:26:37,644 | INFO | [2/2083] Match 8609806964 START
+2026-03-03 04:26:37,644 | INFO | Match 8609806964: fetch overview
+2026-03-03 04:28:37,774 | WARNING | Fetch retry 1/3 for https://ru.dotabuff.com/matches/8609806964: Timeout while loading https://ru.dotabuff.com/matches/8609806964
+2026-03-03 04:31:02,438 | INFO | Match 8609806964: parse overview
+2026-03-03 04:31:05,403 | INFO | Match 8609806964: update Excel
+2026-03-03 04:31:26,742 | INFO | Match 8609806964: removed 1 summary rows before append
+2026-03-03 04:31:39,183 | INFO | [2/2083] Match 8609806964 DONE in 301.5s
+2026-03-03 04:31:43,080 | INFO | [3/2083] Match 8609798220 INCOMPLETE -> reparse
+2026-03-03 04:31:43,080 | INFO | [3/2083] Match 8609798220 START
+2026-03-03 04:31:43,080 | INFO | Match 8609798220: fetch overview
