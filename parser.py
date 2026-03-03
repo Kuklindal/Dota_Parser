@@ -138,8 +138,22 @@ def fetch_dotabuff_with_playwright(url, timeout=60000, save_debug_path=None, hea
             for candidate in _url_candidates(url):
                 for attempt in range(1, 4):
                     try:
-                        page.goto(candidate, wait_until="domcontentloaded", timeout=_clamp_timeout(timeout))
-                        page.wait_for_load_state("domcontentloaded")
+                        # First wait for response commit to inspect HTTP status quickly.
+                        # This lets us skip retries on hard 404/410 pages.
+                        response = page.goto(
+                            candidate,
+                            wait_until="commit",
+                            timeout=_clamp_timeout(min(20000, timeout))
+                        )
+                        if response is not None:
+                            try:
+                                status = int(response.status)
+                            except Exception:
+                                status = None
+                            if status in (404, 410):
+                                raise DotabuffNotFoundError(f"Dotabuff page not found: {candidate} (HTTP {status})")
+
+                        page.wait_for_load_state("domcontentloaded", timeout=_clamp_timeout(timeout))
                         page.wait_for_timeout(_clamp_timeout(1500))
                         title_l = (page.title() or "").lower()
                         if "just a moment" in title_l:
@@ -152,6 +166,14 @@ def fetch_dotabuff_with_playwright(url, timeout=60000, save_debug_path=None, hea
                         last_err = e
                         if isinstance(e, DotabuffNotFoundError):
                             raise
+                        # Even if navigation timed out, the page may already show a Dotabuff 404 body.
+                        try:
+                            if _is_dotabuff_not_found_page(page):
+                                raise DotabuffNotFoundError(f"Dotabuff page not found: {candidate}")
+                        except DotabuffNotFoundError:
+                            raise
+                        except Exception:
+                            pass
                         page.wait_for_timeout(_clamp_timeout(700 * attempt))
                 if loaded_url:
                     break
